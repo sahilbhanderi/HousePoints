@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace HousePointsApp
 {
-    public class _LoginSucessModel : PageModel
+    public class LoginSucessModel : PageModel
     {
         public void OnGet()
         {
