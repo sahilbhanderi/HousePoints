@@ -8,11 +8,14 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\lib\bootstrap\dist %28copy%29\" />
+    <Folder Include="DataServices\" />
+    <Folder Include="Interfaces\" />
   </ItemGroup>
 
 
 
   <ItemGroup>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.1" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.1" />
   </ItemGroup>
 </Project>
