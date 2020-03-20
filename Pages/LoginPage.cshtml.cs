@@ -21,40 +21,49 @@ namespace HousePointsApp
 
         public IActionResult OnPost()
         {
-            StudentDataService sds = new StudentDataService();
-            AttendanceDataService ads = new AttendanceDataService();
-
-            // Test that we can get a student
-            Student student = sds.GetStudent("123456789");
-            Console.WriteLine(student.student_id);
-            Console.WriteLine(student.first_name);
-            Console.WriteLine(student.last_name);
-            Console.WriteLine(student.total_points);
-
-            // Test that we can insert a student
-            //Boolean success = sds.CreateStudent("487623409");
-            Boolean attendance = ads.CreateAttendance("487623409");
-            //Console.WriteLine(success);
-            Console.WriteLine(attendance);
-
-            Attendance maxAttendance = ads.GetLatestAttendance("123456789");
-            Console.WriteLine(maxAttendance.sessionid);
-            Console.WriteLine(maxAttendance.student_id);
-            Console.WriteLine(maxAttendance.check_in);
-            Console.WriteLine(maxAttendance.check_out);
-            Console.WriteLine(maxAttendance.session_points);
-
-            /* Test that we can delete a student
-            Boolean deleted = sds.DeleteStudent("12345678");
-            Console.WriteLine(deleted);*/
-
-            // Test that we can update a check-out time
-            Boolean update_checkout = ads.UpdateSession("1010");
-            Console.WriteLine(update_checkout);
+            // Call ProcessSwipe here with student id from card reader
 
             if (ModelState.IsValid == false)
             { return Page(); }
             return RedirectToPage("./Response/_LoginSuccess");
+        }
+
+        public String ProcessSwipe(String studentId)
+        {
+            String message;
+
+            StudentDataService sds = new StudentDataService();
+            AttendanceDataService ads = new AttendanceDataService();
+
+            Student student = sds.GetStudent(studentId);
+
+            if (student.student_id == null)
+            {
+                sds.CreateStudent(studentId);
+                ads.CreateAttendance(studentId);
+
+                message = "Welcome to the Learning Factory " + student.first_name + "!" +
+                    "This is your first time signing in. We have created a new profile for you. " +
+                    "Have fun building!";
+            } else
+            {
+                Attendance attendance = ads.GetLatestAttendance(studentId);
+
+                if (attendance.check_out == null)
+                {
+                    ads.UpdateSession(attendance.session_id.ToString());
+
+                    message = "You have been signed out. Thanks for coming!";
+                } else
+                {
+                    ads.CreateAttendance(studentId);
+
+                    message = "You have signed into the Learning Factory. Have fun building!";
+                }
+            }
+
+
+            return message;
         }
     }
 }

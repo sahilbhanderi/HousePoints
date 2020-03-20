@@ -7,7 +7,7 @@ namespace HousePointsApp.DataServices
     public class AttendanceDataService : IAttendanceDataService
     {
         private String CONNECTION_STRING = @"Data Source=localhost;Initial Catalog=Capstone;" +
-        "User ID=sa;Password=CBwbi2005";
+        "User ID=sa;Password=YourPassword";
 
         public Boolean CreateAttendance(String studentId)
         {

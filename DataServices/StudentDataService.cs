@@ -16,7 +16,7 @@ namespace HousePointsApp.DataServices
     public class StudentDataService : IStudentDataService
     {
         private String CONNECTION_STRING = @"Data Source=localhost;Initial Catalog=Capstone;" +
-            "User ID=sa;Password=INSERTPWDHERE";
+            "User ID=sa;Password=YourPassword";
 
         public Student GetStudent(String studentId)
         {
@@ -29,18 +29,24 @@ namespace HousePointsApp.DataServices
             SqlCommand getStudentCommand = new SqlCommand(getStudentSql, cnn);
             SqlDataReader getStudentReader = getStudentCommand.ExecuteReader();
 
-            while (getStudentReader.Read())
+            try
             {
-                student.student_id = getStudentReader.GetValue(0).ToString();
-                student.first_name = getStudentReader.GetValue(1).ToString();
-                student.last_name = getStudentReader.GetValue(2).ToString();
-                student.total_points = Convert.ToInt32(getStudentReader.GetValue(3));
+                while (getStudentReader.Read())
+                {
+                    student.student_id = getStudentReader.GetValue(0).ToString();
+                    student.first_name = getStudentReader.GetValue(1).ToString();
+                    student.last_name = getStudentReader.GetValue(2).ToString();
+                    student.total_points = Convert.ToInt32(getStudentReader.GetValue(3));
+                }
+                cnn.Close();
+
+                return student;
+            } catch
+            {
+                cnn.Close();
+
+                return null;
             }
-
-            Console.WriteLine("DONE!");
-            cnn.Close();
-
-            return student;
         }
 
         public Boolean CreateStudent(String studentId)
@@ -49,8 +55,8 @@ namespace HousePointsApp.DataServices
             cnn.Open();
 
             // Lionpath view stuff will go here to look-up student-id
-            String first_name = "Tom";
-            String last_name = "Hanks";
+            String first_name = "Corona";
+            String last_name = "Virus";
 
             String insertStudentSql = "INSERT INTO STUDENT " +
                 "(student_id, first_name, last_name, total_points) " +
