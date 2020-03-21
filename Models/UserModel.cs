@@ -10,8 +10,8 @@ namespace HousePointsApp.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
 
-        public string UID { get; set; }
-        public int HousePoint { get; set; }
+        public string UID { get; set; } = "";
+        public int HousePoint { get; set; } = 0;
 
     }
 }

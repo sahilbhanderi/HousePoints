@@ -10,7 +10,12 @@ namespace HousePointsApp
 {
     public class AddUserModel : PageModel
     {
+        [ViewData]
+        public string UserName { get; set; } = "Default";
+        public string Text { get; set; }
+
         [BindProperty]
+        [ViewData]
         public UserModel UserAccount { get; set; }
 
         public void OnGet()
@@ -22,7 +27,11 @@ namespace HousePointsApp
         { 
             if (ModelState.IsValid == false)
             { return Page(); }
+
+            ViewData["UserName"] = "Average Joe";
+
             return RedirectToPage("./Response/_LoginSuccess");
         }
+
     }
 }

@@ -4,42 +4,16 @@
     ViewData["Title"] = "Welcome to Learning Factory Login Page";
 }
 
-<h1>Login Page</h1>
-
-<div class="container align-middle">
-    <div class="form-row text-center">
-        <div class="col text-md-center">
+<div class="container-fluid">
+    <h1>Login Page</h1>
+    <div class="form-row text-left">
+        <div class="col">
             <form method="post">
-                <input type="text" asp-for="UserAccount.UID" placeholder="PSU ID Here" />
+                <input id="UIDbox" name="UIDbox" type="text" asp-for="UserAccount.UID" />
                 <button type="submit">Submit</button>
                 <button type="reset">Reset Input</button>
             </form>
         </div>
     </div>
-    <div class="form-row text-center">
-        <div class="col text-md-center">
-            <button type="button" class="btn btn-primary btn-lg">1</button>
-            <button type="button" class="btn btn-primary btn-lg">2</button>
-            <button type="button" class="btn btn-primary btn-lg">3</button>
-        </div>
-        <div class="w-100"></div>
-        <div class="col text-md-center">
-            <button type="button" class="btn btn-primary btn-lg">4</button>
-            <button type="button" class="btn btn-primary btn-lg">5</button>
-            <button type="button" class="btn btn-primary btn-lg">6</button>
-        </div>
-        <div class="w-100"></div>
-        <div class="col text-md-center">
-            <button type="button" class="btn btn-primary btn-lg">7</button>
-            <button type="button" class="btn btn-primary btn-lg">8</button>
-            <button type="button" class="btn btn-primary btn-lg">9</button>
-        </div>
-        <div class="w-100"></div>
-        <div class="col text-md-center">
-            <button type="button" class="btn btn-primary btn-lg ">0</button>
-        </div>
-    </div>
 </div>
-
-
 

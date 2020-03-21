@@ -1,0 +1,37 @@
+﻿@page
+@model HousePointsApp.AdminModel
+@{
+    ViewData["Title"] = "Admin";
+    ViewData["UserName"] = "";
+    ViewData["CurrentPoint"] = "No User selected";
+}
+<!-- Content section -->
+
+<div class="container-fluid">
+    <h1>Welcome to Learning Factory Admin Page</h1>
+    <div class="form-row text-left">
+        <div class="col">
+            <form method="post">
+                <label for="UIDSelect">Choose User Account to work on:</label>
+                <input id="UIDSelect" name="UIDSelect" type="text" placeholder="934191061" />
+                <button type="submit">Submit</button>
+                <button type="reset">Reset</button>
+                <label for="">Current Point total: @ViewData["CurrentPoint"]</label>
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Actions to do
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownActionMenu">
+                        <a class="dropdown-item" href="#">Check Current Point</a>
+                        <a class="dropdown-item" href="#">Increase/Award Point</a>
+                        <a class="dropdown-item" href="#">Decrease/Redeem Point</a>
+                        <a class="dropdown-item" href="#">Set House Point</a>
+                        <a class="dropdown-item" href="#">Delete Account</a>
+                    </div>
+                </div>
+                <label for="ChangeValue">Choose Value of Change(E.G. Value to increase point by):</label>
+                <input id="ChangeValue" name="ChangeValue" type="text" placeholder="42" />
+            </form>
+        </div>
+    </div>
+</div>
