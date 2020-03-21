@@ -16,12 +16,7 @@ namespace HousePointsApp
         public string Text { get; set; }
 
         [BindProperty]
-<<<<<<< HEAD
-        [ViewData]
-        public UserModel UserAccount { get; set; }
-=======
         public Student student { get; set; }
->>>>>>> 15a94725a03ffe3c11f83922371fe1fba694a0ee
 
         public void OnGet()
         {
@@ -39,9 +34,6 @@ namespace HousePointsApp
 
             return RedirectToPage("./Response/_LoginSuccess");
         }
-
-<<<<<<< HEAD
-=======
         public String ProcessSwipe(String studentId)
         {
             String message;
@@ -79,6 +71,5 @@ namespace HousePointsApp
 
             return message;
         }
->>>>>>> 15a94725a03ffe3c11f83922371fe1fba694a0ee
     }
 }
