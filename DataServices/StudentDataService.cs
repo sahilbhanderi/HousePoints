@@ -15,8 +15,8 @@ namespace HousePointsApp.DataServices
 {
     public class StudentDataService : IStudentDataService
     {
-        private String CONNECTION_STRING = @"Data Source=localhost;Initial Catalog=Capstone;" +
-            "User ID=sa;Password=YourPassword";
+        private String CONNECTION_STRING = @"Server=np:\\.\pipe\LOCALDB#A3474A90\tsql\query; Initial Catalog=Capstone;";
+            
 
         public Student GetStudent(String studentId)
         {
