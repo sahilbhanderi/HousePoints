@@ -51,7 +51,7 @@ namespace HousePointsApp
 
             ChangeValueLabel = "Increase Point By";
 
-         
+            Action = "IncreasePoint";
 
             return Page();
         }
@@ -61,7 +61,7 @@ namespace HousePointsApp
 
             ChangeValueLabel = "Decrease Point by";
 
-            
+            Action = "DecreasePoint";
 
             return Page();
         }
@@ -71,6 +71,7 @@ namespace HousePointsApp
 
             ChangeValueLabel = "Set Point to";
 
+            Action = "SetPoint";
 
             return Page();
         }
@@ -80,7 +81,7 @@ namespace HousePointsApp
 
             ChangeValueLabel = "No Input Needed";
 
-         
+            Action = "DeleteAccount";
 
             return Page();
         }

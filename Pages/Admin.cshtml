@@ -11,16 +11,16 @@
 
 <!-- Content section -->
 <!-- $('#datebox').val($(this).html());-->
-    <div class="container-fluid">
-        <h1>Welcome to Learning Factory Admin Page</h1>
-        
-        @{
-            if (TempData.Peek("DisplayMessage") != null)
-            {
-                <h3>Message: @TempData.Peek("DisplayMessage")</h3>
-            }
+<div class="container-fluid">
+    <h1>Welcome to Learning Factory Admin Page</h1>
+
+    @{
+        if (Model.DisplayMessage != null)
+        {
+            <h3>Message: @Model.DisplayMessage</h3>
         }
-        
+    }
+    <form asp-page-handler="Submit" method="post">
         <div class="form-row text-left">
             <div class="col">
                 <div class="dropdown">
@@ -31,48 +31,40 @@
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="dropdownActionMenu" role="menu">
                         <li>
-                            <form asp-page-handler="CheckBalance" method="post">
-                                <button class="btn btn-secondary" style="width:200px;" id="1" value="Check Point Balances">Check Point Balances</button>
-                            </form>
+                            <button class="btn btn-secondary" style="width:200px;" id="1" value="Check Point Balances" asp-page-handler="CheckBalance">Check Point Balances</button>
                         </li>
                         <li>
-                            <form asp-page-handler="IncreasePoint" method="post">
-                                <button class="btn btn-secondary" style="width:200px;" id="2" value="Increase/Award Points">Increase/Award Points</button>
-                            </form>
+                            <button class="btn btn-secondary" style="width:200px;" id="2" value="Increase/Award Points" asp-page-handler="IncreasePoint">Increase/Award Points</button>
                         </li>
                         <li>
-                            <form asp-page-handler="DecreasePoint" method="post">
-                                <button class="btn btn-secondary" style="width:200px;" id="3" value="Decrease/Redeem Points">Decrease/Redeem Points</button>
-                            </form>
+                            <button class="btn btn-secondary" style="width:200px;" id="3" value="Decrease/Redeem Points" asp-page-handler="DecreasePoint">Decrease/Redeem Points</button>
                         </li>
                         <li>
-                            <form asp-page-handler="SetPoint" method="post">
-                                <button class="btn btn-secondary" style="width:200px;" id="4" value="Set Point Balance">Set Point Balance</button>
-                            </form>
+                            <button class="btn btn-secondary" style="width:200px;" id="4" value="Set Point Balance" asp-page-handler="SetPoint">Set Point Balance</button>
                         </li>
                         <li>
-                            <form asp-page-handler="DeleteAccount" method="post">
-                                <button class="btn btn-secondary" style="width:200px;" id="5" value="Delete Account">Delete Account</button>
-                            </form>
+                            <button class="btn btn-secondary" style="width:200px;" id="5" value="Delete Account" asp-page-handler="DeleteAccount">Delete Account</button>
                         </li>
                     </ul>
                 </div>
-                <form asp-page-handler="Submit" method="post">
-                    <div class="row">
-                        <label for="UIDSelect">Choose User Account to work on:</label>
-                        <input id="UIDSelect" name="UIDSelect" type="text" placeholder="934191061" />
-                        <label for="">Current Point total: @Model.CurrentPoint</label>
-                    </div>
-                    <div class="row">
-                        <label for="ChangeValue">@Model.ChangeValueLabel:</label>
-                        <input id="ChangeValue" name="ChangeValue" type="text" placeholder="Enter Value" />
-                    </div>
-                    <div class="row">
-                        <button class="btn btn-primary" ID ="6" type="submit">Submit</button>
-                        <button class="btn btn-primary" type="reset">Reset</button>
-                    </div>
-                </form>
+
+                <div class="row">
+                    <label for="UIDSelect">Choose User Account to work on:</label>
+                    <input id="UIDSelect" name="UIDSelect" type="text" placeholder="934191061" />
+                </div>
+                <div class="row">
+                    <label for="">Current Point total: @Model.CurrentPoint</label>
+                </div>
+                <div class="row">
+                    <label for="ChangeValue">@Model.ChangeValueLabel:</label>
+                    <input id="ChangeValue" name="ChangeValue" type="text" placeholder="Enter Value" />
+                </div>
+                <div class="row">
+                    <button class="btn btn-primary" ID="6" type="submit">Submit</button>
+                    <button class="btn btn-primary" type="reset">Reset</button>
+                </div>
             </div>
         </div>
+    </form>
 
-    </div>
+</div>
