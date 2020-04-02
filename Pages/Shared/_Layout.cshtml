@@ -8,82 +8,96 @@
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
-    <header>
-        <!-- Navigation -->
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-            <div class="container">
-                <a class="navbar-brand" href="#">Learning Factory</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarResponsive">
-                    <ul class="navbar-nav ml-auto">
-                        <li class="nav-item active">
-                            <a class="nav-link" asp-area="" asp-page="./Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-page="./LoginPage">Login</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Contact</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">About Us</a>
-                        </li>
-                    </ul>
+    <div id="page-content">
+
+        <header>
+            <!-- Navigation -->
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+                <div class="container">
+                    <a class="navbar-brand" asp-page="./Index">Learning Factory</a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarResponsive">
+                        <ul class="navbar-nav ml-auto">
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-page="./Index">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-page="./LoginPage">Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-page="./Admin">Admin</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-page="./About">About</a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
+            </nav>
+        </header>
+
+        <!-- Header - set the background image for the header in the line below -->
+        <header>
+            <div>
+                <p class="lead">Padding</p>
             </div>
-        </nav>
+            <div class="text-center">
+                <style>
 
 
-    </header>
-    <!-- Header - set the background image for the header in the line below -->
-    <header>
-        <div>
-            <p class="lead">Padding</p>
-        </div>
-        <div class="text-center">
-            <style>
 
-                .largeBackground {
-                    position: relative;
-                    top: 20px;
-                    left: 0;
-                }
+                    .largeBackground {
+                        position: relative;
+                        top: 20px;
+                        left: 0;
+                    }
 
-                .LogoOnTop {
-                    position: absolute;
-                    top: 80px;
-                    left: 650px;
-                }
-            </style>
-            <img class="img-fluid mx-auto" src="~/LF_Brand/LF_Banner_with_side_pattern.PNG" style="height:350px; width:700px " alt="">
-            <!--img class="LogoOnTop mx-auto" src="~/LF_Brand/LF_Logo_Primary_Dark_Background.PNG" style="height:150px; width:150px" alt=""-->
-        </div>
-    </header>
+                    .LogoOnTop {
+                        position: absolute;
+                        top: 80px;
+                        left: 650px;
+                    }
+                </style>
+                <img class="img-fluid mx-auto" src="~/LF_Brand/LF_Banner_with_side_pattern.PNG" style="height:350px; width:700px " alt="">
+                <!--img class="LogoOnTop mx-auto" src="~/LF_Brand/LF_Logo_Primary_Dark_Background.PNG" style="height:150px; width:150px" alt=""-->
+            </div>
+        </header>
 
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
-
-    <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2020 - HousePointsApp - <a asp-area="" asp-page="/Privacy">Privacy</a>
+            <main role="main" class="pb-3">
+                @RenderBody()
+            </main>
         </div>
-    </footer>
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
 
-    @RenderSection("Scripts", required: false)
+        <!-- Set tab to active when clicked on -->
+        <script type="text/javascript">var url = window.location.href;
+
+            if (url.indexOf("/LoginPage") >= 0) {
+                $("ul.navbar-nav a.nav-link[href='/LoginPage']").parent().addClass("active");
+            }
+            else if (url.indexOf("/Admin") >= 0) {
+                $("ul.navbar-nav a.nav-link[href='/Admin']").parent().addClass("active");
+            }
+            else if (url.indexOf("/About") >= 0) {
+                $("ul.navbar-nav a.nav-link[href='/About']").parent().addClass("active");
+            }
+            else {
+                $("ul.navbar-nav a.nav-link[href='/']").parent().addClass("active");
+            }</script>
+
+        @RenderSection("Scripts", required: false)
+    </div>
 </body>
 
 </html>
 <!-- Footer -->
-<footer class="py-5 bg-dark">
+<footer id="sticky-footer" class="py-5 bg-dark">
     <div class="container">
         <p class="m-0 text-center text-white">Copyright &copy; Penn State Learning Factory 2020</p>
     </div>
