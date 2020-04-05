@@ -13,22 +13,28 @@ namespace HousePointsApp.DataServices
         public int CheckPoints(String studentId)
         {
             SqlConnection cnn = new SqlConnection(CONNECTION_STRING);
+           
             cnn.Open();
+               
             String getStudentSql = "SELECT * FROM STUDENT WHERE student_id = " + studentId + ";";
 
             Student student = new Student();
 
             SqlCommand getStudentCommand = new SqlCommand(getStudentSql, cnn);
             SqlDataReader getStudentReader = getStudentCommand.ExecuteReader();
-
-            while (getStudentReader.Read())
+            // if there is rows, means read success, then get points
+            if (getStudentReader.HasRows == true)
             {
-                student.total_points = Convert.ToInt32(getStudentReader.GetValue(3));
+                while (getStudentReader.Read())
+                {
+                    student.total_points = Convert.ToInt32(getStudentReader.GetValue(3));
+                }
+                cnn.Close();
             }
-            cnn.Close();
-
-            if (student.total_points is DBNull) student.total_points = null;
-
+            else
+            {// set to -1 if fail to get total points
+                student.total_points = -1;
+            }
             return student.total_points;
         }
 
