@@ -25,7 +25,8 @@ namespace HousePointsApp
 
         public IActionResult OnPost()
         {
-            // Call ProcessSwipe here with student id from card reader
+            // Call ProcessSwipe with student id from card swipe
+            ProcessSwipe("385720839");
 
             if (ModelState.IsValid == false)
             { return Page(); }
@@ -34,16 +35,20 @@ namespace HousePointsApp
 
             return RedirectToPage("./Response/_LoginSuccess");
         }
+
+        // ProcessSwipe handles the workflow for a student swiping their id
+        // card at the Learning Factory.
+
         public String ProcessSwipe(String studentId)
         {
-            String message;
+            String message = "";
 
             StudentDataService sds = new StudentDataService();
             AttendanceDataService ads = new AttendanceDataService();
 
             Student student = sds.GetStudent(studentId);
 
-            if (student.student_id == null)
+            if (student.student_id == null) // new student swipes id card
             {
                 sds.CreateStudent(studentId);
                 ads.CreateAttendance(studentId);
@@ -51,16 +56,20 @@ namespace HousePointsApp
                 message = "Welcome to the Learning Factory " + student.first_name + "!" +
                     "This is your first time signing in. We have created a new profile for you. " +
                     "Have fun building!";
-            } else
+            }
+
+            else // existing student swipes id card
             {
                 Attendance attendance = ads.GetLatestAttendance(studentId);
 
-                if (attendance.check_out == null)
+                if (attendance.check_out == null) // student has not yet signed out
                 {
                     ads.UpdateSession(attendance.session_id.ToString());
 
                     message = "You have been signed out. Thanks for coming!";
-                } else
+                }
+
+                else // student has no open attendance sessions
                 {
                     ads.CreateAttendance(studentId);
 
@@ -73,3 +82,4 @@ namespace HousePointsApp
         }
     }
 }
+
