@@ -184,8 +184,8 @@ namespace HousePointsApp.DataServices
             SqlConnection cnn = new SqlConnection(CONNECTION_STRING);
             cnn.Open();
 
-            String Set_Points = $"UPDATE prizes SET point_value = '{prizePoints}' WHERE prize_name = '{prize};'";
-
+            String Set_Points = "UPDATE prizes SET point_value = " +
+                prizePoints + " WHERE prize_name = '" + prize + "';";
             SqlCommand Set_Points_Command = new SqlCommand(Set_Points, cnn);
 
             /*  try
