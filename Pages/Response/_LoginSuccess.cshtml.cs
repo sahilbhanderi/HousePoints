@@ -15,10 +15,5 @@ namespace HousePointsApp
         {
 
         }
-
-        public IActionResult OnPost()
-        {
-            return RedirectToPage("./Index");
-        }
     }
 }
