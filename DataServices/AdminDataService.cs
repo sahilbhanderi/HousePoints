@@ -6,9 +6,10 @@ using HousePointsApp.Models;
 namespace HousePointsApp.DataServices
 {
     public class AdminDataService : IAdminDataService
-    {
-        private String CONNECTION_STRING = @"Data Source=np:\\.\pipe\LOCALDB#ED44DC30\tsql\query; 
-                                            Initial Catalog=The_Learning_Factory_Points_System;";
+    {   
+        // Make sure to update to your own db name
+        private String CONNECTION_STRING = @"Data Source=(localdb)\MSSQLLocalDB; 
+                                             Initial Catalog = The_Learning_Factory_Points_System;";
         //private String CONNECTION_STRING = @"Data Source=localhost;Initial Catalog=The_Learning_Factory_Points_System;" +
         //    "User ID=sa;Password=YourPasswordHere";
         public int CheckPoints(String studentId)
@@ -26,7 +27,7 @@ namespace HousePointsApp.DataServices
             {
                 while (getStudentReader.Read())
                 {
-                    student.total_points = Convert.ToInt32(getStudentReader.GetValue(3));
+                    student.total_points = Convert.ToInt32(getStudentReader.GetValue(4)); 
                 }
                 cnn.Close();
             }
@@ -157,20 +158,25 @@ namespace HousePointsApp.DataServices
             cnn.Open();
 
             String deletePrizeSql = "DELETE FROM prizes WHERE " +
-                "prize_name = " + prize + ";";
+                "prize_name = '" + prize + "';";
 
             SqlCommand deletePrizeCommand = new SqlCommand(deletePrizeSql, cnn);
 
-            try
-            {
-                deletePrizeCommand.ExecuteNonQuery();
+            /*
+             *try
+             {
+                 deletePrizeCommand.ExecuteNonQuery();
 
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
+                 return true;
+             }
+             catch
+             {
+                 return false;
+             }
+             */
+            deletePrizeCommand.ExecuteNonQuery();
+
+            return true;
         }
 
         public Boolean UpdatePrizePoints(String prize, int prizePoints) 
@@ -178,20 +184,49 @@ namespace HousePointsApp.DataServices
             SqlConnection cnn = new SqlConnection(CONNECTION_STRING);
             cnn.Open();
 
-            String Set_Points = "UPDATE prizes SET point_value = " +
-            prizePoints + " WHERE prize_name = " + prize + ";";
+            String Set_Points = $"UPDATE prizes SET point_value = '{prizePoints}' WHERE prize_name = '{prize};'";
 
             SqlCommand Set_Points_Command = new SqlCommand(Set_Points, cnn);
 
-            try
+            /*  try
+              {
+                  Set_Points_Command.ExecuteNonQuery();
+                  return true;
+              }
+              catch
+              {
+                  return false;
+              }
+          */
+            Set_Points_Command.ExecuteNonQuery();
+            return true;
+        }
+
+        public string GetAllPrizes()
+        {
+            SqlConnection cnn = new SqlConnection(CONNECTION_STRING);
+            cnn.Open();
+            String getAllPrizeSql = "SELECT * FROM PRIZES ;";
+            String PrizeList = "Prize List:\n";
+            
+
+            SqlCommand getAllPrizeCommand = new SqlCommand(getAllPrizeSql, cnn);
+            SqlDataReader getAllPrizeReader = getAllPrizeCommand.ExecuteReader();
+            // if there is rows, means read success, then get points
+            if (getAllPrizeReader.HasRows == true)
             {
-                Set_Points_Command.ExecuteNonQuery();
-                return true;
+                while (getAllPrizeReader.Read())
+                {
+                    PrizeList += "Item: "+ getAllPrizeReader.GetValue(1).ToString() + 
+                                 " Value: " + getAllPrizeReader.GetValue(2).ToString() + '\n';
+                }
+                cnn.Close();
             }
-            catch
-            {
-                return false;
+            else
+            {// set to -1 if fail to get total points
+                PrizeList = null;
             }
+            return PrizeList;
         }
     }
 }

@@ -15,8 +15,8 @@ namespace HousePointsApp.DataServices
 {
     public class StudentDataService : IStudentDataService
     {
-
-        private String CONNECTION_STRING = @"Data Source=np:\\.\pipe\LOCALDB#ED44DC30\tsql\query; 
+        // Make sure to update to your own db name
+        private String CONNECTION_STRING = @"Data Source=(localdb)\MSSQLLocalDB; 
                                              Initial Catalog = The_Learning_Factory_Points_System;"; 
         //private String CONNECTION_STRING = @"Data Source=localhost;Initial Catalog=The_Learning_Factory_Points_System;" +
         //    "User ID=sa;Password=YourPasswordHere";
@@ -28,7 +28,7 @@ namespace HousePointsApp.DataServices
              SqlConnection cnn = new SqlConnection(CONNECTION_STRING);
              cnn.Open();
 
-             String getFirstNameSql = "SELECT first_name FROM vw_LF_Students WHERE student_id = " + studentId;
+             String getFirstNameSql = "SELECT first_name FROM vw_LF_Students WHERE student_id = " + studentId + ";";
              SqlCommand getFirstNameCommand = new SqlCommand(getFirstNameSql, cnn);
 
              SqlDataReader getFirstNameReader = getFirstNameCommand.ExecuteReader();
@@ -49,7 +49,7 @@ namespace HousePointsApp.DataServices
              SqlConnection cnn = new SqlConnection(CONNECTION_STRING);
              cnn.Open();
 
-             String getLastNameSql = "SELECT last_name FROM vw_LF_Students WHERE student_id = " + studentId;
+             String getLastNameSql = "SELECT last_name FROM vw_LF_Students WHERE student_id = " + studentId + ";";
              SqlCommand getLastNameCommand = new SqlCommand(getLastNameSql, cnn);
 
              SqlDataReader getLastNameReader = getLastNameCommand.ExecuteReader();
@@ -70,7 +70,7 @@ namespace HousePointsApp.DataServices
              SqlConnection cnn = new SqlConnection(CONNECTION_STRING);
              cnn.Open();
 
-             String getCampusIdSql = "SELECT campus_id FROM vw_LF_Students WHERE student_id = " + studentId;
+             String getCampusIdSql = "SELECT campus_id FROM vw_LF_Students WHERE student_id = " + studentId + ";";
              SqlCommand getCampusIdCommand = new SqlCommand(getCampusIdSql, cnn);
 
              SqlDataReader getCampusIdReader = getCampusIdCommand.ExecuteReader();
@@ -90,7 +90,7 @@ namespace HousePointsApp.DataServices
 
             SqlConnection cnn = new SqlConnection(CONNECTION_STRING);
             cnn.Open();
-            String getStudentSql = "SELECT * FROM STUDENT WHERE student_id = " + studentId;
+            String getStudentSql = "SELECT * FROM STUDENT WHERE student_id = " + studentId + ";";
 
             Student student = new Student();
 
