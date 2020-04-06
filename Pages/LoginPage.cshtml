@@ -1,20 +1,19 @@
 ﻿@page
 @model HousePointsApp.AddUserModel
 @{
-    ViewData["Title"] = "Welcome to Learning Factory Login Page";
+    ViewData["Title"] = "Login";
 }
 
 <div class="container-fluid">
-    <h1>Login Page</h1>
+    <h1>Log in to the Learning Factory</h1>
     <div class="form-row text-left">
         <div class="col">
             <form method="post">
                 <label for="UIDbox">PSU ID:</label>
-                <input type="text" ID="UIDbox" name="UIDbox" asp-for="student.student_id" placeholder="PSU ID Here" />
-                <button type="submit">Submit</button>
-                <button type="reset">Reset Input</button>
+                <input type="text" name="studentID" size="30" placeholder="Please enter your 9 digit PSU ID:" />
+                <button class="btn btn-primary" type="submit">Submit</button>
+                <button class="btn btn-primary" type="reset">Reset Input</button>
             </form>
         </div>
     </div>
 </div>
-

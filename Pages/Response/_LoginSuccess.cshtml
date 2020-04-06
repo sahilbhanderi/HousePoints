@@ -1,9 +1,14 @@
 ﻿@page
-@model HousePointsApp.LoginSucessModel
+@model HousePointsApp.AddUserModel
 @{
-    
+    ViewData["Title"] = "Success";
 }
-<div class="container align-middle">
-    <p>Hi, @Model.CurrentUserName Welcome UID @Model.UID</p>
-
+@{
+    Layout = "./Shared/_LayoutSuccess";
+}
+<div class="container-fluid">
+    <br />
+    <h3>@Model.Text</h3>
+    <br />
+    <a href="/Index" class="btn btn-primary">Back to Home</a>
 </div>

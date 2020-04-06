@@ -11,8 +11,9 @@ namespace HousePointsApp
 {
     public class AddUserModel : PageModel
     {
-        [ViewData]
-        public string UserName { get; set; } = "Default";
+        [BindProperty(Name = "username", SupportsGet = true)]
+        public string UserName { get; set; }
+        [BindProperty(Name = "text", SupportsGet = true)]
         public string Text { get; set; }
 
         [BindProperty]
@@ -26,14 +27,14 @@ namespace HousePointsApp
         public IActionResult OnPost()
         {
             // Call ProcessSwipe with student id from card swipe
-            ProcessSwipe("385720839");
+            var studentID = Request.Form["studentID"];
+            Text = ProcessSwipe(studentID);
 
             if (ModelState.IsValid == false)
             { return Page(); }
 
-            ViewData["UserName"] = "Average Joe";
 
-            return RedirectToPage("./Response/_LoginSuccess");
+            return RedirectToPage("./Response/_LoginSuccess", "Display", new { text = Text });
         }
 
         // ProcessSwipe handles the workflow for a student swiping their id
@@ -52,8 +53,8 @@ namespace HousePointsApp
             {
                 sds.CreateStudent(studentId);
                 ads.CreateAttendance(studentId);
-
-                message = "Welcome to the Learning Factory " + student.first_name + "!" +
+                
+                message = "Welcome to the Learning Factory " + student.first_name + "! " +
                     "This is your first time signing in. We have created a new profile for you. " +
                     "Have fun building!";
             }
@@ -66,14 +67,16 @@ namespace HousePointsApp
                 {
                     ads.UpdateSession(attendance.session_id.ToString());
 
-                    message = "You have been signed out. Thanks for coming!";
+                    message = "You have been signed out. Thanks for coming " +
+                        student.first_name+"!";
                 }
 
                 else // student has no open attendance sessions
                 {
                     ads.CreateAttendance(studentId);
 
-                    message = "You have signed into the Learning Factory. Have fun building!";
+                    message = "Hi " + student.first_name + ", you have signed " +
+                        "into the Learning Factory. Have fun building!";
                 }
             }
 

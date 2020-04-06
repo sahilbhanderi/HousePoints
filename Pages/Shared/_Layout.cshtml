@@ -27,9 +27,6 @@
                                 <a class="nav-link" asp-area="" asp-page="./LoginPage">Login</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-page="./Admin">Admin</a>
-                            </li>
-                            <li class="nav-item">
                                 <a class="nav-link" asp-area="" asp-page="./About">About</a>
                             </li>
                         </ul>
@@ -80,9 +77,6 @@
 
             if (url.indexOf("/LoginPage") >= 0) {
                 $("ul.navbar-nav a.nav-link[href='/LoginPage']").parent().addClass("active");
-            }
-            else if (url.indexOf("/Admin") >= 0) {
-                $("ul.navbar-nav a.nav-link[href='/Admin']").parent().addClass("active");
             }
             else if (url.indexOf("/About") >= 0) {
                 $("ul.navbar-nav a.nav-link[href='/About']").parent().addClass("active");
