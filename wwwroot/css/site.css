@@ -59,13 +59,22 @@ html {
 }
 
 body {
-  /* Margin bottom by footer height */
-  margin-bottom: 60px;
+  padding: 0;
+  margin: 0;
+  height: 100%;
 }
 .footer {
-  position: absolute;
+  position: fixed;
+  left: 0;
   bottom: 0;
   width: 100%;
-  white-space: nowrap;
-  line-height: 60px; /* Vertically center the text there */
+  text-align: center;
+}
+
+#sticky-footer {
+    flex-shrink: none;
+}
+
+#page-content {
+    flex: 1 0 auto;
 }

@@ -5,16 +5,20 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using HousePointsApp.Models;
+using HousePointsApp.DataServices;
 
 namespace HousePointsApp
 {
     public class LoginSucessModel : PageModel
     {
-        public string UID = "Unknown";
-        public string CurrentUserName = "";
         public void OnGet()
         {
-            
+
+        }
+
+        public IActionResult OnPost()
+        {
+            return RedirectToPage("./Index");
         }
     }
 }
