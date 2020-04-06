@@ -122,8 +122,10 @@ namespace HousePointsApp.DataServices
                 cnn.Close();
                 return true;
             }
-            catch
+            catch (SqlException e)
             {
+                Console.WriteLine(e.ToString());
+
                 cnn.Close();
                 return false;
             }
@@ -217,8 +219,10 @@ namespace HousePointsApp.DataServices
                 cnn.Close();
                 return true;
             }
-            catch
+            catch (SqlException e)
             {
+                Console.WriteLine(e.ToString());
+
                 cnn.Close();
                 return false;
             }

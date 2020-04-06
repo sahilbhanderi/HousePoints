@@ -117,10 +117,11 @@ namespace HousePointsApp.DataServices
                 cnn.Close();
 
                 return student;
-            } catch
+            } catch (SqlException e)
             {
-                cnn.Close();
+                Console.WriteLine(e.ToString());
 
+                cnn.Close();
                 return null;
             }
         }
@@ -154,8 +155,10 @@ namespace HousePointsApp.DataServices
 
                 cnn.Close();
                 return true;
-            } catch
+            } catch (SqlException e)
             {
+                Console.WriteLine(e.ToString());
+
                 cnn.Close();
                 return false;
             }
@@ -188,8 +191,10 @@ namespace HousePointsApp.DataServices
 
                 cnn.Close();
                 return true;
-            } catch
+            } catch (SqlException e)
             {
+                Console.WriteLine(e.ToString());
+
                 cnn.Close();
                 return false;
             }
