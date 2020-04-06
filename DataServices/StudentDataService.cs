@@ -15,8 +15,11 @@ namespace HousePointsApp.DataServices
 {
     public class StudentDataService : IStudentDataService
     {
-        private String CONNECTION_STRING = @"Data Source=localhost;Initial Catalog=The_Learning_Factory_Points_System;" +
-            "User ID=sa;Password=YourPasswordHere";
+
+        private String CONNECTION_STRING = @"Data Source=np:\\.\pipe\LOCALDB#ED44DC30\tsql\query; 
+                                             Initial Catalog = The_Learning_Factory_Points_System;"; 
+        //private String CONNECTION_STRING = @"Data Source=localhost;Initial Catalog=The_Learning_Factory_Points_System;" +
+        //    "User ID=sa;Password=YourPasswordHere";
 
         public String GetFirstName(String studentId)
         {
@@ -87,7 +90,7 @@ namespace HousePointsApp.DataServices
 
             SqlConnection cnn = new SqlConnection(CONNECTION_STRING);
             cnn.Open();
-            String getStudentSql = "SELECT * FROM STUDENT WHERE student_id = " + studentId + ";";
+            String getStudentSql = "SELECT * FROM STUDENT WHERE student_id = " + studentId;
 
             Student student = new Student();
 

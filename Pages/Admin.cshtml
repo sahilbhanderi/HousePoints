@@ -50,14 +50,16 @@
 
                 <div class="row">
                     <label for="UIDSelect">Choose User Account to work on:</label>
-                    <input id="UIDSelect" name="UIDSelect" type="text" placeholder="934191061" />
+                    <input id="UIDSelect" name="UIDSelect" type="text" asp-for="UID"
+                           placeholder="934191061" />
                 </div>
                 <div class="row">
                     <label for="">Current Point total: @Model.CurrentPoint</label>
                 </div>
                 <div class="row">
                     <label for="ChangeValue">@Model.ChangeValueLabel:</label>
-                    <input id="ChangeValue" name="ChangeValue" type="text" placeholder="Enter Value" />
+                    <input id="ChangeValue" name="ChangeValue" type="number"  asp-for="ChangeValue"
+                           placeholder="Enter Value" />
                 </div>
                 <div class="row">
                     <button class="btn btn-primary" ID="6" type="submit">Submit</button>

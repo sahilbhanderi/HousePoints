@@ -4,6 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using HousePointsApp.Models;
+using HousePointsApp.DataServices;
+using HousePointsApp.Interfaces;
 
 namespace HousePointsApp
 {
@@ -14,24 +17,64 @@ namespace HousePointsApp
         public string Action { get; set; } = "";
         [TempData]
         public string DisplayMessage { get; set; } = "";
+        [TempData]
+        public string UID { get; set; } = "";
+        [TempData]
+        public int ChangeValue { get; set; } 
         public string DropDownMessage = "Actions";
         public string ChangeValueLabel = "Set Point to";
         public string CurrentPoint = "No User Selected";
+        
         public void OnGet()
         {
 
         }
         public IActionResult OnPost()
         {
-            // Call ProcessSwipe here with student id from card reader
+            // Default, Not Used ATM
             return Page();
         }
+        // Activates when Submit button on admin page is clicked.
         public IActionResult OnPostSubmit()
         {
-            // Call ProcessSwipe here with student id from card reader
+            Student student = new Student();
+            StudentDataService IfaceStudent = new StudentDataService();
+            if (UID == "" || UID == null || Action == "" || Action == null)
+            {
+                DisplayMessage = $"Error Occured due to Action or ID number transition.";
+            }
+            if ((student = IfaceStudent.GetStudent(UID)) != null)
+            {
 
-            DisplayMessage = $"Action done with {Action}";
-            return Page();
+                DisplayMessage = $"Action done with {Action} and student {student.first_name} {student.last_name}";
+                switch (Action)
+                {
+                    case "CheckBalance":
+                        CurrentPoint = student.total_points.ToString();
+                        break;
+                    case "IncreasePoint":
+                        AdminDataService IfaceAdmin = new AdminDataService();
+                        IfaceAdmin.IncrementPoints(UID, ChangeValue);
+                        CurrentPoint = IfaceAdmin.CheckPoints(UID).ToString();
+                        break;
+                    case "DecreasePoint":
+                        break;
+                    case "SetPoint":
+                        break;
+                    case "DeleteAccount":
+                        break;
+                    default:
+                        DisplayMessage = $"Error Occured due to Action variable.";
+                        break;
+                }
+                return Page();
+            }
+            else
+            {
+                DisplayMessage = $"Error Occured due to Student not found.";
+                return Page();
+            }
+
         }
         public IActionResult OnPostCheckBalance()
         {

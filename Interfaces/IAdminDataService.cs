@@ -7,13 +7,11 @@ namespace HousePointsApp.Interfaces
     {
         public int CheckPoints(String studentId);
 
-        public Boolean IncrementPoints(String studentId);
+        public Boolean IncrementPoints(String studentId, int point);
 
-        public Boolean DecrementPoints(String studentId);
+        public Boolean DecrementPoints(String studentId, int point);
 
         public Boolean SetPoints(String studentId, int points);
-
-        public Boolean DeleteAccount(String studentId);
 
         public Boolean AddAccount(String studentID, String firstName, String lastName);
 

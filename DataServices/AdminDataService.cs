@@ -7,15 +7,14 @@ namespace HousePointsApp.DataServices
 {
     public class AdminDataService : IAdminDataService
     {
-        private String CONNECTION_STRING = @"Data Source=localhost;Initial Catalog=Capstone;" +
-        "User ID=sa;Password=YourPassword";
-
+        private String CONNECTION_STRING = @"Data Source=np:\\.\pipe\LOCALDB#ED44DC30\tsql\query; 
+                                            Initial Catalog=The_Learning_Factory_Points_System;";
+        //private String CONNECTION_STRING = @"Data Source=localhost;Initial Catalog=The_Learning_Factory_Points_System;" +
+        //    "User ID=sa;Password=YourPasswordHere";
         public int CheckPoints(String studentId)
         {
             SqlConnection cnn = new SqlConnection(CONNECTION_STRING);
-           
             cnn.Open();
-               
             String getStudentSql = "SELECT * FROM STUDENT WHERE student_id = " + studentId + ";";
 
             Student student = new Student();
@@ -38,10 +37,10 @@ namespace HousePointsApp.DataServices
             return student.total_points;
         }
 
-        public Boolean IncrementPoints(String studentId)
+        public Boolean IncrementPoints(String studentId, int point)
         { 
             int student_points = CheckPoints(studentId);
-            student_points++;
+            student_points += point;
 
             SqlConnection cnn = new SqlConnection(CONNECTION_STRING);
             cnn.Open();
@@ -62,10 +61,10 @@ namespace HousePointsApp.DataServices
             }
         }
 
-        public Boolean DecrementPoints(String studentId)
+        public Boolean DecrementPoints(String studentId, int point)
         {
             int student_points = CheckPoints(studentId);
-            student_points--;
+            student_points-= point;
 
             SqlConnection cnn = new SqlConnection(CONNECTION_STRING);
             cnn.Open();
@@ -99,33 +98,6 @@ namespace HousePointsApp.DataServices
             try
             {
                 Set_Points_Command.ExecuteNonQuery();
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        public Boolean DeleteAccount(String studentId)
-        {
-            SqlConnection cnn = new SqlConnection(CONNECTION_STRING);
-            cnn.Open();
-
-            String deleteAttendanceSql = "DELETE FROM attendance WHERE " +
-                "student_id = " + studentId + ";";
-
-            String deleteStudentSql = "DELETE FROM student WHERE " +
-                "student_id = " + studentId + ";";
-
-            SqlCommand deleteAttendanceCommand = new SqlCommand(deleteAttendanceSql, cnn);
-            SqlCommand deleteStudentCommand = new SqlCommand(deleteStudentSql, cnn);
-
-            try
-            {
-                deleteAttendanceCommand.ExecuteNonQuery();
-                deleteStudentCommand.ExecuteNonQuery();
-
                 return true;
             }
             catch

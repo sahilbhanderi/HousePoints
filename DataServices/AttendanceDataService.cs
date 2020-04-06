@@ -7,8 +7,10 @@ namespace HousePointsApp.DataServices
 {
     public class AttendanceDataService : IAttendanceDataService
     {
-        private String CONNECTION_STRING = @"Data Source=localhost;Initial Catalog=The_Learning_Factory_Points_System;" +
-            "User ID=sa;Password=YourPasswordHere";
+        private String CONNECTION_STRING = @"Data Source=np:\\.\pipe\LOCALDB#ED44DC30\tsql\query; 
+                                            Initial Catalog=The_Learning_Factory_Points_System;";
+        //private String CONNECTION_STRING = @"Data Source=localhost;Initial Catalog=The_Learning_Factory_Points_System;" +
+        //    "User ID=sa;Password=YourPasswordHere";
 
         public String GetCampusId(String studentId)
         {
