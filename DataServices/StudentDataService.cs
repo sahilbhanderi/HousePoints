@@ -18,6 +18,7 @@ namespace HousePointsApp.DataServices
         private String CONNECTION_STRING = @"Data Source=localhost;Initial Catalog=The_Learning_Factory_Points_System;" +
             "User ID=sa;Password=YourPasswordHere";
 
+        // This function queries a LionPath view to retrieve a student's first name
         public String GetFirstName(String studentId)
         {
             // Query LionPath view for student's first name
@@ -25,7 +26,7 @@ namespace HousePointsApp.DataServices
              SqlConnection cnn = new SqlConnection(CONNECTION_STRING);
              cnn.Open();
 
-             String getFirstNameSql = "SELECT first_name FROM vw_LF_Students WHERE student_id = " + studentId;
+             String getFirstNameSql = "SELECT first_name FROM View_Students WHERE emplid = '" + studentId + "'";
              SqlCommand getFirstNameCommand = new SqlCommand(getFirstNameSql, cnn);
 
              SqlDataReader getFirstNameReader = getFirstNameCommand.ExecuteReader();
@@ -36,8 +37,11 @@ namespace HousePointsApp.DataServices
                  first_name = getFirstNameReader.GetValue(0).ToString();
              }
 
+             cnn.Close();
              return first_name;
         }
+
+        // This function queries a LionPath view to retrieve a student's last name
 
         public String GetLastName(String studentId)
         {
@@ -46,7 +50,7 @@ namespace HousePointsApp.DataServices
              SqlConnection cnn = new SqlConnection(CONNECTION_STRING);
              cnn.Open();
 
-             String getLastNameSql = "SELECT last_name FROM vw_LF_Students WHERE student_id = " + studentId;
+             String getLastNameSql = "SELECT last_name FROM View_Students WHERE emplid = '" + studentId + "'";
              SqlCommand getLastNameCommand = new SqlCommand(getLastNameSql, cnn);
 
              SqlDataReader getLastNameReader = getLastNameCommand.ExecuteReader();
@@ -57,8 +61,11 @@ namespace HousePointsApp.DataServices
                  last_name = getLastNameReader.GetValue(0).ToString();
              }
 
+             cnn.Close();
              return last_name;
         }
+
+        // This function queries a LionPath view to retrieve a student's campus id
 
         public String GetCampusId(String studentId)
         {
@@ -67,7 +74,7 @@ namespace HousePointsApp.DataServices
              SqlConnection cnn = new SqlConnection(CONNECTION_STRING);
              cnn.Open();
 
-             String getCampusIdSql = "SELECT campus_id FROM vw_LF_Students WHERE student_id = " + studentId;
+             String getCampusIdSql = "SELECT campus_id FROM View_Students WHERE emplid = '" + studentId + "'";
              SqlCommand getCampusIdCommand = new SqlCommand(getCampusIdSql, cnn);
 
              SqlDataReader getCampusIdReader = getCampusIdCommand.ExecuteReader();
@@ -78,8 +85,11 @@ namespace HousePointsApp.DataServices
                  campus_id = getCampusIdReader.GetValue(0).ToString();
              }
 
-             return campus_id;
+            cnn.Close();
+            return campus_id;
         }
+
+        // This function retrieves the record for a specific student
 
         public Student GetStudent(String studentId)
         {
@@ -87,7 +97,7 @@ namespace HousePointsApp.DataServices
 
             SqlConnection cnn = new SqlConnection(CONNECTION_STRING);
             cnn.Open();
-            String getStudentSql = "SELECT * FROM STUDENT WHERE student_id = " + studentId + ";";
+            String getStudentSql = "SELECT * FROM student WHERE student_id = '" + studentId + "';";
 
             Student student = new Student();
 
@@ -115,6 +125,8 @@ namespace HousePointsApp.DataServices
             }
         }
 
+        // This function creates a record for a new student
+
         public Boolean CreateStudent(String studentId)
         {
             // Get first name, last name, and campus id for corresponding
@@ -139,12 +151,18 @@ namespace HousePointsApp.DataServices
             try
             {
                 insertStudentCommand.ExecuteNonQuery();
+
+                cnn.Close();
                 return true;
             } catch
             {
+                cnn.Close();
                 return false;
             }
         }
+
+        // This function deletes both the student and all attendance records
+        // for a specific student
 
         public Boolean DeleteStudent(String userId)
         {
@@ -168,9 +186,11 @@ namespace HousePointsApp.DataServices
                 deleteAttendanceCommand.ExecuteNonQuery();
                 deleteStudentCommand.ExecuteNonQuery();
 
+                cnn.Close();
                 return true;
             } catch
             {
+                cnn.Close();
                 return false;
             }
         }
