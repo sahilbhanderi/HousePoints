@@ -18,6 +18,7 @@ namespace HousePointsApp
 
         [BindProperty]
         public Student student { get; set; }
+        public string status = "";
 
         public void OnGet()
         {
@@ -28,6 +29,15 @@ namespace HousePointsApp
         {
             // Call ProcessSwipe with student id from card swipe
             var studentID = Request.Form["studentID"];
+
+            // Check if studentID is valid int
+            bool result = int.TryParse(studentID, out _);
+            if (studentID == "" || result == false || studentID.ToString().Length != 9)
+            {
+                status = "Please enter valid 9 digit PSU ID.";
+                return Page();
+            }
+
             Text = ProcessSwipe(studentID);
 
             if (ModelState.IsValid == false)
