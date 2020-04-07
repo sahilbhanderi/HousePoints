@@ -88,6 +88,7 @@ namespace HousePointsApp
                             success = IfaceAdmin.SetPoints(UID, ChangeValue);
                             break;
                         case "DeleteAccount":
+                            success = IfaceStudent.DeleteStudent(UID);
                             break;
                         default:
                             DisplayMessage = $"Error Occured due to Action variable.";

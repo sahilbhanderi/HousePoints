@@ -21,7 +21,8 @@ namespace HousePointsApp.DataServices
             Student student = new Student();
 
             SqlCommand getStudentCommand = new SqlCommand(getStudentSql, cnn);
-            SqlDataReader getStudentReader = getStudentCommand.ExecuteReader();
+            SqlDataReader getStudentReader = getStudentCommand.ExecuteReader(); ;
+
             // if there is rows, means read success, then get points
             if (getStudentReader.HasRows == true)
             {
@@ -32,7 +33,9 @@ namespace HousePointsApp.DataServices
                 cnn.Close();
             }
             else
-            {// set to -1 if fail to get total points
+            {
+                cnn.Close();
+                    
                 student.total_points = -1;
             }
             return student.total_points;
@@ -56,8 +59,11 @@ namespace HousePointsApp.DataServices
                 incrementPointsCommand.ExecuteNonQuery();
                 return true;
             }
-            catch
+            catch (SqlException e)
             {
+                Console.WriteLine(e.ToString());
+
+                cnn.Close();
                 return false;
             }
         }
@@ -80,8 +86,11 @@ namespace HousePointsApp.DataServices
                 Increment_Points_Command.ExecuteNonQuery();
                 return true;
             }
-            catch
+            catch (SqlException e)
             {
+                Console.WriteLine(e.ToString());
+
+                cnn.Close();
                 return false;
             }
         }
@@ -101,8 +110,11 @@ namespace HousePointsApp.DataServices
                 Set_Points_Command.ExecuteNonQuery();
                 return true;
             }
-            catch
+            catch (SqlException e)
             {
+                Console.WriteLine(e.ToString());
+
+                cnn.Close();
                 return false;
             }
         }
@@ -123,8 +135,11 @@ namespace HousePointsApp.DataServices
 
                 return true;
             }
-            catch
+            catch (SqlException e)
             {
+                Console.WriteLine(e.ToString());
+
+                cnn.Close();
                 return false;
             }
 
@@ -146,8 +161,11 @@ namespace HousePointsApp.DataServices
 
                 return true;
             }
-            catch
+            catch (SqlException e)
             {
+                Console.WriteLine(e.ToString());
+
+                cnn.Close();
                 return false;
             }
         }
@@ -162,21 +180,19 @@ namespace HousePointsApp.DataServices
 
             SqlCommand deletePrizeCommand = new SqlCommand(deletePrizeSql, cnn);
 
-            /*
-             *try
+             try
              {
                  deletePrizeCommand.ExecuteNonQuery();
 
                  return true;
              }
-             catch
-             {
-                 return false;
-             }
-             */
-            deletePrizeCommand.ExecuteNonQuery();
+             catch (SqlException e)
+            {
+                Console.WriteLine(e.ToString());
 
-            return true;
+                cnn.Close();
+                return false;
+            }
         }
 
         public Boolean UpdatePrizePoints(String prize, int prizePoints) 
@@ -188,18 +204,19 @@ namespace HousePointsApp.DataServices
                 prizePoints + " WHERE prize_name = '" + prize + "';";
             SqlCommand Set_Points_Command = new SqlCommand(Set_Points, cnn);
 
-            /*  try
+              try
               {
                   Set_Points_Command.ExecuteNonQuery();
                   return true;
               }
-              catch
-              {
-                  return false;
-              }
-          */
-            Set_Points_Command.ExecuteNonQuery();
-            return true;
+              catch (SqlException e)
+            {
+                Console.WriteLine(e.ToString());
+
+                cnn.Close();
+                return false;
+            }
+          
         }
 
         public string GetAllPrizes()
@@ -223,8 +240,9 @@ namespace HousePointsApp.DataServices
                 cnn.Close();
             }
             else
-            {// set to -1 if fail to get total points
+            {// set to null if fail
                 PrizeList = null;
+                cnn.Close();
             }
             return PrizeList;
         }
