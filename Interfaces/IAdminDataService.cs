@@ -22,5 +22,7 @@ namespace HousePointsApp.Interfaces
         public Boolean UpdatePrizePoints(String prize, int prizePoints);
 
         public string GetAllPrizes();
+
+        public Boolean CheckIsAdmin(String AdminID, String password);
     }
 }

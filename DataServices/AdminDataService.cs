@@ -246,5 +246,40 @@ namespace HousePointsApp.DataServices
             }
             return PrizeList;
         }
+
+        public Boolean CheckIsAdmin(String AdminID, String password)
+        {
+            SqlConnection cnn = new SqlConnection(CONNECTION_STRING);
+            cnn.Open();
+            String getAllAdmin = $"SELECT access_code FROM admin WHERE employee_id = '{AdminID}';";
+
+            SqlCommand getAllAdminCommand = new SqlCommand(getAllAdmin, cnn);
+            try
+            {
+                SqlDataReader getAllAdminReader = getAllAdminCommand.ExecuteReader();
+                // if there is rows, means read success, then get points
+                if (getAllAdminReader.HasRows == true)
+                {
+                    while (getAllAdminReader.Read())
+                    {
+                        if (password == getAllAdminReader.GetValue(0).ToString())
+                        {
+                            break;
+                        }
+                    }
+
+                }
+                cnn.Close();
+                return true;
+            }
+            catch (SqlException e)
+            {
+                Console.WriteLine(e.ToString());
+
+                cnn.Close();
+                return false;
+            }
+
+        }
     }
 }

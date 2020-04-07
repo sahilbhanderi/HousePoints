@@ -1,0 +1,39 @@
+﻿@page
+@model HousePointsApp.AdminLoginModel
+@{
+    ViewData["Title"] = "AdminLogin";
+}
+    <div class="container-fluid">
+        <h1>Welcome to Learning Factory</h1>
+        <h3>Staff/Admin Login Page</h3>
+
+       @{ 
+           if (Model.DisplayMessage != null & Model.DisplayMessage != "")
+           {
+            <h4>Message: @Model.DisplayMessage</h4>
+           }
+        }
+
+        <form asp-page-handler="Submit" method="post" asp-antiforgery="true">
+            <div class="form-row text-left">
+                <div class="col">
+
+                    <div class="row">
+                        <label asp-for="UID">Admin ID:</label>
+                        <input asp-for="UID" type="text" placeholder="Admin ID Here" />
+                    </div>
+
+                    <div class="row">
+                        <label asp-for="password">Password:</label>
+                        <input asp-for="password" type="text"
+                               placeholder="Enter Value" />
+                    </div>
+                    <div class="row">
+                        <button class="btn btn-primary" ID="6" type="submit">Submit</button>
+                        <button class="btn btn-primary" type="reset">Reset</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+    </div>
