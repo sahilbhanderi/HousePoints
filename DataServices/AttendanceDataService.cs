@@ -7,11 +7,8 @@ namespace HousePointsApp.DataServices
 {
     public class AttendanceDataService : IAttendanceDataService
     {
-        // Make sure to update to your own db name
-        private String CONNECTION_STRING = @"Data Source=(localdb)\MSSQLLocalDB; 
-                                             Initial Catalog = The_Learning_Factory_Points_System;";
-        //private String CONNECTION_STRING = @"Data Source=localhost;Initial Catalog=The_Learning_Factory_Points_System;" +
-        //    "User ID=sa;Password=YourPasswordHere";
+        private String CONNECTION_STRING = @"Data Source=localhost;Initial Catalog=The_Learning_Factory_Points_System;" +
+            "User ID=sa;Password=YourPasswordHere";
 
         public String GetCampusId(String studentId)
         {
@@ -184,10 +181,37 @@ namespace HousePointsApp.DataServices
             return attendance;
         }
 
-        // This function updates the check_out time and point value for an attendance record
+        // This function updates the check_out time and point value for an attendance record.
+        // It also updates total_points for a student record.
 
         public Boolean UpdateSession(String sessionId)
         {
+            // Find campus id for corresponding session id, as this will be
+            // needed for updating the point value in the student table
+
+            SqlConnection temp_cnn = new SqlConnection(CONNECTION_STRING);
+            temp_cnn.Open();
+
+            String GetCampusId = "SELECT campus_id FROM attendance WHERE " +
+                "session_id = " + sessionId;
+            SqlCommand GetCampusIdCommand = new SqlCommand(GetCampusId, temp_cnn);
+            SqlDataReader GetCampusIdReader = GetCampusIdCommand.ExecuteReader();
+
+            String campus_id = "";
+
+            while (GetCampusIdReader.Read())
+            {
+                campus_id = GetCampusIdReader.GetValue(0).ToString();
+            }
+
+            temp_cnn.Close();
+
+            // Create a new database connection that will be used to execute
+            // remaining queries
+
+            SqlConnection cnn = new SqlConnection(CONNECTION_STRING);
+            cnn.Open();
+
             // Determine the check_in and check_out time for session that will
             // be used to determine point value assigned
 
@@ -196,10 +220,8 @@ namespace HousePointsApp.DataServices
             DateTime check_out = DateTime.Now;
             string sqlFormattedDate = check_out.ToString("yyyy-MM-dd HH:mm:ss.fff");
 
-            // Update check_out time and point value for student's attendance record
-
-            SqlConnection cnn = new SqlConnection(CONNECTION_STRING);
-            cnn.Open();
+            // Create SQL statements to update check_out time and point value
+            // in attendance table and total_points in student table
 
             int session_points = GetSessionPoints(check_in, check_out);
 
@@ -209,13 +231,19 @@ namespace HousePointsApp.DataServices
             String UpdatePoints = "UPDATE attendance SET session_points = " +
                 session_points + " WHERE session_id = '" + sessionId + "';";
 
+            String UpdateTotalPoints = "UPDATE student SET total_points = " +
+                "total_points + " + session_points + " WHERE campus_id = '" +
+                campus_id + "'";
+
             SqlCommand setUpdatedSession = new SqlCommand(UpdateSession, cnn);
             SqlCommand setUpdatedPoints = new SqlCommand(UpdatePoints, cnn);
+            SqlCommand setUpdatedTotalPoints = new SqlCommand(UpdateTotalPoints, cnn);
 
             try
             {
                 setUpdatedSession.ExecuteNonQuery();
                 setUpdatedPoints.ExecuteNonQuery();
+                setUpdatedTotalPoints.ExecuteNonQuery();
 
                 cnn.Close();
                 return true;
