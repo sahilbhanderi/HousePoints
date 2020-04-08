@@ -64,7 +64,7 @@ namespace HousePointsApp
                 if (sds.CreateStudent(studentId) && ads.CreateAttendance(studentId))
                 {
                     student = sds.GetStudent(studentId);
-                    message = "Welcome to the Learning Factory " + student.first_name + "! " +
+                    message = "Welcome to the Learning Factory! " +
                         "This is your first time signing in. We have created a new profile for you. " +
                         "Have fun building!";
                 }
