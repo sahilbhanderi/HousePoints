@@ -62,9 +62,12 @@ namespace HousePointsApp
             if (student.student_id == null) // new student swipes id card
             {
                 if (sds.CreateStudent(studentId) && ads.CreateAttendance(studentId))
+                {
+                    student = sds.GetStudent(studentId);
                     message = "Welcome to the Learning Factory " + student.first_name + "! " +
                         "This is your first time signing in. We have created a new profile for you. " +
                         "Have fun building!";
+                }
                 else
                     message = "An error occurred when processing your card. Please try again or " +
                         "find a staff member if error continues to occur.";
