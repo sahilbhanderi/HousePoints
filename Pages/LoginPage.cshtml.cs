@@ -62,7 +62,7 @@ namespace HousePointsApp
             if (student.student_id == null) // new student swipes id card
             {
                 if (sds.CreateStudent(studentId) && ads.CreateAttendance(studentId))
-                    message = "Welcome to the Learning Factory " + student.first_name + "! " +
+                    message = "Welcome to the Learning Factory! " +
                         "This is your first time signing in. We have created a new profile for you. " +
                         "Have fun building!";
                 else
