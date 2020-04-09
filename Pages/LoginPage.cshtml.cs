@@ -91,7 +91,8 @@ namespace HousePointsApp
                 {
                     if (ads.CreateAttendance(studentId))
                         message = "Hi " + student.first_name + ", you have signed " +
-                            "into the Learning Factory. Have fun building!";
+                            "into the Learning Factory. Have fun building!  You currently have "
+                            + student.total_points + " points.";
                     else
                         message = "An error occurred when processing your card. Please try again or " +
                             "find a staff member if error continues to occur.";
