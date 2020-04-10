@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using HousePointsApp.Interfaces;
 using HousePointsApp.Models;
@@ -219,23 +220,52 @@ namespace HousePointsApp.DataServices
           
         }
 
-        public string GetAllPrizes()
+        public List<String> GetAllPrizesName()
         {
             SqlConnection cnn = new SqlConnection(CONNECTION_STRING);
             cnn.Open();
-            String getAllPrizeSql = "SELECT * FROM PRIZES ;";
-            String PrizeList = "Prize List:\n";
+            String getAllPrizeSql = "SELECT prize_name FROM PRIZES ORDER BY prize_id ASC;";
+            List<String>PrizeList = new List<String>();
             
+            SqlCommand getAllPrizeCommand = new SqlCommand(getAllPrizeSql, cnn);
+            SqlDataReader getAllPrizeReader = getAllPrizeCommand.ExecuteReader();
+            // if there is rows, means read success, then get points
+            if (getAllPrizeReader.HasRows == true)
+            {   int count = 1;
+                while (getAllPrizeReader.Read())
+                {
+                    PrizeList.Add( $"{getAllPrizeReader.GetValue(0).ToString()}");
+                    count++;
+                                 
+                }
+                cnn.Close();
+            }
+            else
+            {// set to null if fail
+                PrizeList = null;
+                cnn.Close();
+            }
+            return PrizeList;
+        }
+
+        public List<String> GetAllPrizesValue()
+        {
+            SqlConnection cnn = new SqlConnection(CONNECTION_STRING);
+            cnn.Open();
+            String getAllPrizeSql = "SELECT point_value FROM PRIZES ORDER BY prize_id ASC;";
+            List<String> PrizeList = new List<String>();
 
             SqlCommand getAllPrizeCommand = new SqlCommand(getAllPrizeSql, cnn);
             SqlDataReader getAllPrizeReader = getAllPrizeCommand.ExecuteReader();
             // if there is rows, means read success, then get points
             if (getAllPrizeReader.HasRows == true)
             {
+                int count = 1;
                 while (getAllPrizeReader.Read())
                 {
-                    PrizeList += "Item: "+ getAllPrizeReader.GetValue(1).ToString() + 
-                                 " Value: " + getAllPrizeReader.GetValue(2).ToString() + '\n';
+                    PrizeList.Add($"{getAllPrizeReader.GetValue(0).ToString()}");
+                    count++;
+
                 }
                 cnn.Close();
             }

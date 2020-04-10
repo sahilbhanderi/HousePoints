@@ -8,14 +8,16 @@ using HousePointsApp.Models;
 using HousePointsApp.DataServices;
 using HousePointsApp.Interfaces;
 
+
 namespace HousePointsApp
 {
     public class AdminModel : PageModel
     {
-
         [TempData]
         public string Action { get; set; } = "";
         [TempData]
+        public string Actiontype { get; set; } = "";
+
         public string DisplayMessage { get; set; } = "";
 
         [BindProperty]
@@ -23,33 +25,38 @@ namespace HousePointsApp
 
         [BindProperty]
         public int ChangeValue { get; set; } = 0;
+        
         public string DropDownMessage { get; set; } = "Student Actions";
+        
         public string PrizeMessage { get; set; } = "Prize Actions";
+ 
         public string ChangeValueLabel { get; set; } = "Set Point to";
+
         public string PointMessage { get; set; } = "No Selection Made";
-        [TempData]
-        public string PrizeList { get; set; } = null;
-        [TempData]
-        public string Actiontype { get; set; } = "User";
+        
+        public List<String> PrizeNameList { get; set; } = null;
+        
+        public List<String> PrizeValueList { get; set; } = null;
+
 
         public void OnGet()
         {
-
         }
         public IActionResult OnPost()
         {
             // Default, Not Used ATM
+            
             return Page();
         }
         // Activates when Submit button on admin page is clicked.
         public IActionResult OnPostSubmit()
         {
-            Console.WriteLine("Tests test");
-
+            //String Action = HttpContext.Session.GetString(SessionAction);
+            //String Actiontype = HttpContext.Session.GetString(SessionActyionType);
             AdminDataService IfaceAdmin = new AdminDataService();
             bool success = true;
             bool defaultCase = false;
-            // Basic error checking
+            // Basic error checking, Need to reset TempData as well
             if (UID == "" || UID == null)
             {
                 DisplayMessage = $"Error Occured due to ID/Prize Field Empty.";
@@ -69,7 +76,6 @@ namespace HousePointsApp
             {
                 Student student = new Student();
                 StudentDataService IfaceStudent = new StudentDataService();
-                PrizeList = null;
                 if ((student = IfaceStudent.GetStudent(UID)) != null)
                 {
                     switch (Action)
@@ -97,6 +103,7 @@ namespace HousePointsApp
                             success = false;
                             break;
                     }
+
                     if (success)
                     {
                         PointMessage = $" {student.first_name} {student.last_name} has {IfaceAdmin.CheckPoints(UID).ToString()} Points";
@@ -104,19 +111,19 @@ namespace HousePointsApp
                     }
                     else if (defaultCase)
                     {
-                        return Page();
+                        // do Nothing
                     }
                     else
                     {
                         DisplayMessage = $"Action Failed due to database operation issue";
                         PointMessage = $"Could not Complete Action";
                     }
-                    return Page();
+                   
                 }
                 else
                 {
                     DisplayMessage = $"Error Occured due to Student not found.";
-                    return Page();
+                    
                 }
             }
             else if (Actiontype == "Prize")
@@ -138,39 +145,41 @@ namespace HousePointsApp
                         success = false;
                         break;
                 }
-                PrizeList = IfaceAdmin.GetAllPrizes();
+                PrizeNameList = IfaceAdmin.GetAllPrizesName();
+                PrizeValueList = IfaceAdmin.GetAllPrizesValue();
                 if (success)
                 {
                     PointMessage = $"Action Success with Prize {UID}";
                 }
                 else if (defaultCase)
                 {
-                    return Page();
+                    //Do Nothing
                 }
                 else
                 {
                     PointMessage = $"Action Failed due to database operation issue";
                 }
-                return Page();
+                
             }
             else
             {
                 DisplayMessage = $"Action Type Undefinied!";
-                return Page();
+                
             }
-
+            TempData.Keep("Action");
+            TempData.Keep("Actiontype");
+            return Page();
         }
         public IActionResult OnPostCheckBalance()
         {
-            PrizeList = null;
-
+            TempData.Remove("Action");
+            TempData.Remove("Actiontype");
             DropDownMessage = "Check Point Balances";
             
             ChangeValueLabel = "No Input Needed";
-
-            Action = "CheckBalance";
-
-            Actiontype = "User";
+            
+            TempData["Action"]= "CheckBalance";
+            TempData["Actiontype"] = "User";
 
             ChangeValue = 0;
 
@@ -178,107 +187,110 @@ namespace HousePointsApp
         }
         public IActionResult OnPostIncreasePoint()
         {
-            PrizeList = null;
-
+            TempData.Remove("Action");
+            TempData.Remove("Actiontype");
             DropDownMessage = "Increase/Award Points";
 
             ChangeValueLabel = "Increase Point By";
 
-            Action = "IncreasePoint";
-
-            Actiontype = "User";
-
+            TempData["Action"] = "IncreasePoint";
+            TempData["Actiontype"] = "User";
             return Page();
         }
         public IActionResult OnPostDecreasePoint()
         {
-            PrizeList = null;
-
+            TempData.Remove("Action");
+            TempData.Remove("Actiontype");
             DropDownMessage = "Decrease/Redeem Points";
 
             ChangeValueLabel = "Decrease Point by";
 
-            Action = "DecreasePoint";
-
-            Actiontype = "User";
-
+            TempData["Action"] = "DecreasePoint";
+            TempData["Actiontype"] = "User";
             return Page();
         }
         public IActionResult OnPostSetPoint()
         {
-            PrizeList = null;
-
+            TempData.Remove("Action");
+            TempData.Remove("Actiontype");
             DropDownMessage = "Set Point Balances";
 
             ChangeValueLabel = "Set Point to";
-
-            Action = "SetPoint";
-
-            Actiontype = "User";
-
+            TempData["Action"] = "SetPoint";
+            TempData["Actiontype"] = "User";
             return Page();
         }
         public IActionResult OnPostDeleteAccount()
         {
-            PrizeList = null;
-
+            TempData.Remove("Action");
+            TempData.Remove("Actiontype");
             DropDownMessage = "Delete Account";
 
             ChangeValueLabel = "No Input Needed";
 
-            Action = "DeleteAccount";
-
-            Actiontype = "User";
+            TempData["Action"] = "DeleteAccount";
+            TempData["Actiontype"] = "User";
 
             return Page();
         }
 
         public IActionResult OnPostSetPrize()
         {
-            AdminDataService GetAllPrizes = new AdminDataService();
-            PrizeList = $"{GetAllPrizes.GetAllPrizes()}";
-
+            TempData.Remove("Action");
+            TempData.Remove("Actiontype");
+            AdminDataService IfaceAdmin = new AdminDataService();
+            PrizeNameList = IfaceAdmin.GetAllPrizesName();
+            PrizeValueList = IfaceAdmin.GetAllPrizesValue();
+            if (PrizeNameList == null || PrizeValueList == null)
+            {
+                DisplayMessage = "Error Retrieving Prize List from Database!";
+            }
             ChangeValueLabel = "Set Prize Value to";
 
             PrizeMessage = "Set Value of Existing Prize";
-
-            Action = "SetPrize";
-
-            Actiontype = "Prize";
-
+            
+            TempData["Action"] = "SetPrize";
+            TempData["Actiontype"] = "Prize";
             return Page();
         }
         public IActionResult OnPostAddPrize()
         {
-        
-            AdminDataService GetAllPrizes = new AdminDataService();
-            PrizeList = $"{GetAllPrizes.GetAllPrizes()}";
-
+            TempData.Remove("Action");
+            TempData.Remove("Actiontype");
+            AdminDataService IfaceAdmin = new AdminDataService();
+            PrizeNameList = IfaceAdmin.GetAllPrizesName();
+            PrizeValueList = IfaceAdmin.GetAllPrizesValue();
+            if (PrizeNameList == null || PrizeValueList == null)
+            {
+                DisplayMessage = "Error Retrieving Prize List from Database!";
+            }
             PrizeMessage = "Add New Prize";
 
             ChangeValueLabel = "Set New Prize Value to";
-
-            Action = "AddPrize";
-
-            Actiontype = "Prize";
-
+            TempData["Action"] = "AddPrize";
+            TempData["Actiontype"] = "Prize";
             return Page();
         }
         public IActionResult OnPostDeletePrize()
         {
-            AdminDataService GetAllPrizes = new AdminDataService();
-            PrizeList = $"{GetAllPrizes.GetAllPrizes()}";
-
+            TempData.Remove("Action");
+            TempData.Remove("Actiontype");
+            AdminDataService IfaceAdmin = new AdminDataService();
+            PrizeNameList = IfaceAdmin.GetAllPrizesName();
+            PrizeValueList = IfaceAdmin.GetAllPrizesValue();
+            if (PrizeNameList == null || PrizeValueList == null)
+            {
+                DisplayMessage = "Error Retrieving Prize List from Database!";
+            }
             PrizeMessage = "Delete Existing Prize";
 
             ChangeValueLabel = "No Input Needed";
 
-            Action = "DeletePrize";
-
-            Actiontype = "Prize";
-
+            TempData["Action"] = "DeletePrize";
+            TempData["Actiontype"] = "Prize";
             return Page();
         }
+
     }
     
 }

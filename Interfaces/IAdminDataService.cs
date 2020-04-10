@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using HousePointsApp.Models;
 
 namespace HousePointsApp.Interfaces
@@ -21,7 +22,8 @@ namespace HousePointsApp.Interfaces
 
         public Boolean UpdatePrizePoints(String prize, int prizePoints);
 
-        public string GetAllPrizes();
+        public List<String> GetAllPrizesName();
+        public List<String> GetAllPrizesValue();
 
         public Boolean CheckIsAdmin(String AdminID, String password);
     }

@@ -19,10 +19,6 @@
             {
                 <h4>Message: @Model.DisplayMessage</h4>
             }
-            if (Model.PrizeList != null && Model.PrizeList != "")
-            {
-                <p>@Model.PrizeList</p>
-            }
         }
         <form asp-page-handler="Submit" method="post" asp-antiforgery="true">
             <div class="form-row text-left">
@@ -72,8 +68,8 @@
                     </div>
 
                     <div class="row">
-                        <label asp-for="UID">Choose @Model.Actiontype to work on:</label>
-                        <input asp-for="UID" type="text" placeholder="PSU ID Here" />
+                        <label asp-for="UID">Student/Prize to work on:</label>
+                        <input asp-for="UID" type="text" placeholder="Enter Here" />
                     </div>
                     <div class="row">
                         <label for="">@Model.PointMessage</label>
@@ -90,5 +86,31 @@
                 </div>
             </div>
         </form>
+        @if (Model.PrizeNameList != null && Model.PrizeValueList != null)
+        {
+            <div class="container mb-5 mt-3">
+                <h3>Prize List</h3>
+
+                <table class="table table-striped table-bordered" style="width: 100%">
+                    <thead>
+                        <tr>
+                            <th>Prize Name</th>
+                            <th>Points Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>      
+                    @for(var i = 0; i<Model.PrizeNameList.Count();i++)
+                    {
+                        <tr>
+                            <th>@Model.PrizeNameList[i]</th>
+                            <th>@Model.PrizeValueList[i]</th>
+                        </tr>
+                    } 
+                    </tbody>
+                    <tfoot></tfoot>
+                </table>
+
+            </div>
+        }
 
     </div>

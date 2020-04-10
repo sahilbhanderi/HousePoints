@@ -6,6 +6,11 @@
     <title>@ViewData["Title"] - HousePointsApp</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <!-- DataTable related CSS -->
+    <link rel="stylesheet" type="text/css" href="~/DataTables/datatables.min.css" />
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.16.0/dist/bootstrap-table.min.css">
+
+
 </head>
 <body>
     <div id="page-content">
@@ -71,9 +76,14 @@
         <script src="~/lib/jquery/dist/jquery.min.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
         <script src="~/js/site.js" asp-append-version="true"></script>
+        <!-- DataTable related -->
+        <script type="text/javascript" src="~/DataTables/datatables.min.js"></script>
+        <script src="https://unpkg.com/bootstrap-table@1.16.0/dist/bootstrap-table.min.js"></script>
+        <script src="https://unpkg.com/bootstrap-table@1.16.0/dist/locale/bootstrap-table-zh-CN.min.js"></script>
 
         <!-- Set tab to active when clicked on -->
-        <script type="text/javascript">var url = window.location.href;
+        <script type="text/javascript">
+            var url = window.location.href;
 
             if (url.indexOf("/LoginPage") >= 0) {
                 $("ul.navbar-nav a.nav-link[href='/LoginPage']").parent().addClass("active");
