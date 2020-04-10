@@ -51,8 +51,6 @@ namespace HousePointsApp
         // Activates when Submit button on admin page is clicked.
         public IActionResult OnPostSubmit()
         {
-            //String Action = HttpContext.Session.GetString(SessionAction);
-            //String Actiontype = HttpContext.Session.GetString(SessionActyionType);
             AdminDataService IfaceAdmin = new AdminDataService();
             bool success = true;
             bool defaultCase = false;
@@ -67,9 +65,10 @@ namespace HousePointsApp
                 DisplayMessage = $"Error Occured due to Action not specified.";
                 return Page();
             }
-            if (ChangeValue < 0)
+            if (ChangeValue <= 0 && (Action == "CheckBalance" || Action == "DeletePrize"))
             {
-                DisplayMessage = $"Error Occured due Negative Change Value. Please only enter positive number";
+                DisplayMessage = $"Error Occured due Change Value too small. Please enter a valid number.";
+                PointMessage = $"Could not Complete Action, enter a positive number.";
                 return Page();
             }
             if (Actiontype == "User")

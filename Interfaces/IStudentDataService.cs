@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using HousePointsApp.Models;
 
 namespace HousePointsApp.Interfaces
@@ -11,5 +12,7 @@ namespace HousePointsApp.Interfaces
         public Student GetStudent(String studentId);
         public Boolean CreateStudent(String studentId);
         public Boolean DeleteStudent(String campusId);
+
+        public List<Student> GetTopFiveScoringStudent();
     }
 }

@@ -201,5 +201,40 @@ namespace HousePointsApp.DataServices
             }
         }
 
+        public List<Student> GetTopFiveScoringStudent()
+        {
+            SqlConnection cnn = new SqlConnection(CONNECTION_STRING);
+            cnn.Open();
+            List<Student> TopFiveStudent = new List<Student>();
+            String getTopFiveStudentSql = "SELECT TOP 5 * FROM student ORDER BY total_points DESC;";
+            SqlCommand getTopFiveStudentCommand = new SqlCommand(getTopFiveStudentSql, cnn);
+            int count = 0;
+
+            try
+            {
+                SqlDataReader topFiveStudentReader = getTopFiveStudentCommand.ExecuteReader();
+                while (topFiveStudentReader.Read() && count < 5)
+                {
+                    Student tempStudent = new Student();
+                    tempStudent.first_name = topFiveStudentReader.GetValue(2).ToString();
+                    tempStudent.last_name = topFiveStudentReader.GetValue(3).ToString();
+                    tempStudent.total_points = Convert.ToInt32(topFiveStudentReader.GetValue(4));
+                    TopFiveStudent.Add(tempStudent);
+                    count++;
+                }
+
+                cnn.Close();
+                return TopFiveStudent;
+            }
+            catch (SqlException e)
+            {
+                Console.WriteLine(e.ToString());
+
+                cnn.Close();
+                return null;
+            }
+
+        }
+
     }
 }

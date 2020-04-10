@@ -1,0 +1,36 @@
+﻿@page
+@model HousePointsApp.LeaderBoardModel
+@{
+    ViewData["Title"] = "LeaderBoard";
+}
+
+<h2>LeaderBoard</h2>
+<h4>@Model.DisplayMessage</h4>
+@if (Model.TopFiveStudent != null) 
+{ 
+    <div class="container mb-5 mt-3">
+        <h3>Prize List</h3>
+
+        <table class="table table-striped table-bordered" style="width: 100%">
+            <thead>
+                <tr>
+                    <th>Student Name</th>
+                    <th>Total Points</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (var i = 0; i < 5; i++)
+                {
+                    <tr>
+                        <th>@Model.TopFiveStudent[i].first_name @Model.TopFiveStudent[i].last_name</th>
+                        <th>@Model.TopFiveStudent[i].total_points</th>
+                    </tr>
+                }
+            </tbody>
+            <tfoot></tfoot>
+        </table>
+
+    </div>
+}
+
+
