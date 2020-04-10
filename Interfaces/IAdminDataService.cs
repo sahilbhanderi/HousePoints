@@ -25,6 +25,8 @@ namespace HousePointsApp.Interfaces
         public List<String> GetAllPrizesName();
         public List<String> GetAllPrizesValue();
 
+        public List<Student> GetAllStudents();
+
         public Boolean CheckIsAdmin(String AdminID, String password);
     }
 }

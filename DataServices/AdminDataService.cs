@@ -277,6 +277,45 @@ namespace HousePointsApp.DataServices
             return PrizeList;
         }
 
+        public List<Student> GetAllStudents()
+            //Returns all students and their total points from the student table,
+            //null if table empty
+        {
+            SqlConnection cnn = new SqlConnection(CONNECTION_STRING);
+            cnn.Open();
+            String getAllStudents = "SELECT * FROM student";
+            List<Student> studentList = new List<Student>();
+
+            SqlCommand getAllStudentsCommand = new SqlCommand(getAllStudents, cnn);
+
+            try
+            {
+                SqlDataReader getAllStudentsReader = getAllStudentsCommand.ExecuteReader();
+                if (getAllStudentsReader.HasRows == true)
+                {
+                    Student tempStudent = new Student();
+                    while (getAllStudentsReader.Read())
+                    {
+                        tempStudent.first_name = getAllStudentsReader.GetValue(2).ToString();
+                        tempStudent.last_name = getAllStudentsReader.GetValue(3).ToString();
+                        tempStudent.total_points = Convert.ToInt32(getAllStudentsReader.GetValue(4));
+                        studentList.Add(tempStudent);
+                    }
+
+                    cnn.Close();
+                }
+            }
+            catch (SqlException e) 
+            {
+                Console.WriteLine(e.ToString());
+
+                studentList = null;
+                cnn.Close();
+            }
+
+            return studentList;
+        }
+
         public Boolean CheckIsAdmin(String AdminID, String password)
         {
             SqlConnection cnn = new SqlConnection(CONNECTION_STRING);
