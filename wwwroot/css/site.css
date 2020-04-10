@@ -9,18 +9,24 @@ a.navbar-brand {
 
 /* Provide sufficient contrast against white background */
 a {
-  color: #0366d6;
+  color: #c6b2fd;
 }
 
 .btn-primary {
   color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+  background-color: #041e42;
+  border-color: #1c52d3;
+}
+
+.btn-secondary {
+  color: #fff;
+  background-color: #041e42;
+  border-color: #1c52d3;
 }
 
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
   color: #fff;
-  background-color: #1b6ec2;
+  background-color: #c6b2fd;
   border-color: #1861ac;
 }
 
@@ -33,6 +39,10 @@ html {
   html {
     font-size: 16px;
   }
+}
+
+.bg-dark {
+  background-color: #041e42!important;
 }
 
 .border-top {
@@ -58,10 +68,21 @@ html {
   min-height: 100%;
 }
 
+h1 {
+  font-family: 'Montserrat', sans-serif;
+  color: #f582e9;
+}
+
+h2 {
+  font-family: 'Montserrat', sans-serif;
+  #041e42
+}
+
 body {
   padding: 0;
   margin: 0;
   height: 100%;
+  font-family: 'Roboto', sans-serif;
 }
 .footer {
   position: fixed;
@@ -72,9 +93,9 @@ body {
 }
 
 #sticky-footer {
-    flex-shrink: none;
+  flex-shrink: none;
 }
 
 #page-content {
-    flex: 1 0 auto;
+  flex: 1 0 auto;
 }

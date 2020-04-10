@@ -18,6 +18,7 @@ namespace HousePointsApp
 
         [BindProperty]
         public Student student { get; set; }
+        public string status = "";
 
         public void OnGet()
         {
@@ -28,6 +29,15 @@ namespace HousePointsApp
         {
             // Call ProcessSwipe with student id from card swipe
             var studentID = Request.Form["studentID"];
+
+            // Check if studentID is valid int
+            bool result = int.TryParse(studentID, out _);
+            if (studentID == "" || result == false || studentID.ToString().Length != 9)
+            {
+                status = "Please enter valid 9 digit PSU ID.";
+                return Page();
+            }
+
             Text = ProcessSwipe(studentID);
 
             if (ModelState.IsValid == false)
@@ -52,9 +62,12 @@ namespace HousePointsApp
             if (student.student_id == null) // new student swipes id card
             {
                 if (sds.CreateStudent(studentId) && ads.CreateAttendance(studentId))
-                    message = "Welcome to the Learning Factory " + student.first_name + "! " +
+                {
+                    student = sds.GetStudent(studentId);
+                    message = "Welcome to the Learning Factory! " +
                         "This is your first time signing in. We have created a new profile for you. " +
                         "Have fun building!";
+                }
                 else
                     message = "An error occurred when processing your card. Please try again or " +
                         "find a staff member if error continues to occur.";
@@ -78,7 +91,8 @@ namespace HousePointsApp
                 {
                     if (ads.CreateAttendance(studentId))
                         message = "Hi " + student.first_name + ", you have signed " +
-                            "into the Learning Factory. Have fun building!";
+                            "into the Learning Factory. Have fun building!  You currently have "
+                            + student.total_points + " points.";
                     else
                         message = "An error occurred when processing your card. Please try again or " +
                             "find a staff member if error continues to occur.";
