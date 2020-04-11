@@ -103,10 +103,15 @@ namespace HousePointsApp.DataServices
             Student student = new Student();
 
             SqlCommand getStudentCommand = new SqlCommand(getStudentSql, cnn);
-            SqlDataReader getStudentReader = getStudentCommand.ExecuteReader();
+            
 
             try
             {
+                SqlDataReader getStudentReader = getStudentCommand.ExecuteReader();
+                if (getStudentReader.HasRows == false)
+                {
+                    return null;
+                }
                 while (getStudentReader.Read())
                 {
                     student.student_id = getStudentReader.GetValue(0).ToString();
@@ -208,19 +213,16 @@ namespace HousePointsApp.DataServices
             List<Student> TopFiveStudent = new List<Student>();
             String getTopFiveStudentSql = "SELECT TOP 5 * FROM student ORDER BY total_points DESC;";
             SqlCommand getTopFiveStudentCommand = new SqlCommand(getTopFiveStudentSql, cnn);
-            int count = 0;
-
             try
             {
                 SqlDataReader topFiveStudentReader = getTopFiveStudentCommand.ExecuteReader();
-                while (topFiveStudentReader.Read() && count < 5)
+                while (topFiveStudentReader.Read())
                 {
                     Student tempStudent = new Student();
                     tempStudent.first_name = topFiveStudentReader.GetValue(2).ToString();
                     tempStudent.last_name = topFiveStudentReader.GetValue(3).ToString();
                     tempStudent.total_points = Convert.ToInt32(topFiveStudentReader.GetValue(4));
                     TopFiveStudent.Add(tempStudent);
-                    count++;
                 }
 
                 cnn.Close();

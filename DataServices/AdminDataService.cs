@@ -45,6 +45,11 @@ namespace HousePointsApp.DataServices
         public Boolean IncrementPoints(String studentId, int point)
         { 
             int student_points = CheckPoints(studentId);
+            if (student_points == -1)
+            {
+                return false;
+            }
+
             student_points += point;
 
             SqlConnection cnn = new SqlConnection(CONNECTION_STRING);
@@ -72,6 +77,10 @@ namespace HousePointsApp.DataServices
         public Boolean DecrementPoints(String studentId, int point)
         {
             int student_points = CheckPoints(studentId);
+            if (student_points == -1)
+            {
+                return false;
+            }
             student_points-= point;
 
             SqlConnection cnn = new SqlConnection(CONNECTION_STRING);
@@ -100,7 +109,12 @@ namespace HousePointsApp.DataServices
         {
             SqlConnection cnn = new SqlConnection(CONNECTION_STRING);
             cnn.Open();
-
+            int student_points = CheckPoints(studentId);
+            // Check if student exists
+            if (student_points == -1)
+            {
+                return false;
+            }
             String Set_Points = "UPDATE student SET total_points = " +
             points + " WHERE student_id = " + studentId + ";";
 
@@ -183,9 +197,15 @@ namespace HousePointsApp.DataServices
 
              try
              {
-                 deletePrizeCommand.ExecuteNonQuery();
-
-                 return true;
+                if (CheckPrizeExist(prize))
+                {
+                    deletePrizeCommand.ExecuteNonQuery();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
              }
              catch (SqlException e)
             {
@@ -200,15 +220,23 @@ namespace HousePointsApp.DataServices
         {
             SqlConnection cnn = new SqlConnection(CONNECTION_STRING);
             cnn.Open();
-
+           
             String Set_Points = "UPDATE prizes SET point_value = " +
                 prizePoints + " WHERE prize_name = '" + prize + "';";
             SqlCommand Set_Points_Command = new SqlCommand(Set_Points, cnn);
 
               try
-              {
-                  Set_Points_Command.ExecuteNonQuery();
-                  return true;
+              { 
+                if (CheckPrizeExist(prize))
+                {
+                    Set_Points_Command.ExecuteNonQuery();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+                  
               }
               catch (SqlException e)
             {
@@ -218,6 +246,23 @@ namespace HousePointsApp.DataServices
                 return false;
             }
           
+        }
+
+        public Boolean CheckPrizeExist(String prize)
+        {
+            SqlConnection cnn = new SqlConnection(CONNECTION_STRING);
+            cnn.Open();
+            String CheckPrizeExist = "SELECT * FROM prizes WHERE prize_name = '" + prize + "';";
+            SqlCommand CheckPrizeExistCmd = new SqlCommand(CheckPrizeExist, cnn);
+            SqlDataReader CheckPrizeExistReader = CheckPrizeExistCmd.ExecuteReader();
+            if (CheckPrizeExistReader.HasRows == false)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
         }
 
         public List<String> GetAllPrizesName()
@@ -321,7 +366,7 @@ namespace HousePointsApp.DataServices
             SqlConnection cnn = new SqlConnection(CONNECTION_STRING);
             cnn.Open();
             String getAllAdmin = $"SELECT access_code FROM admin WHERE employee_id = '{AdminID}';";
-
+            Boolean isAdmin = false;
             SqlCommand getAllAdminCommand = new SqlCommand(getAllAdmin, cnn);
             try
             {
@@ -331,22 +376,23 @@ namespace HousePointsApp.DataServices
                 {
                     while (getAllAdminReader.Read())
                     {
-                        if (password == getAllAdminReader.GetValue(0).ToString())
+                        if (password == $"{getAllAdminReader.GetValue(0).ToString()}")
                         {
+                            isAdmin = true;
                             break;
                         }
                     }
 
                 }
                 cnn.Close();
-                return true;
+                return isAdmin;
             }
             catch (SqlException e)
             {
                 Console.WriteLine(e.ToString());
 
                 cnn.Close();
-                return false;
+                return isAdmin;
             }
 
         }

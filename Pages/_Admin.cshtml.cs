@@ -25,28 +25,42 @@ namespace HousePointsApp
 
         [BindProperty]
         public int ChangeValue { get; set; } = 0;
-        
         public string DropDownMessage { get; set; } = "Student Actions";
-        
         public string PrizeMessage { get; set; } = "Prize Actions";
- 
         public string ChangeValueLabel { get; set; } = "Set Point to";
 
-        public string PointMessage { get; set; } = "No Selection Made";
+        public string PointMessage { get; set; } = "";
         
         public List<String> PrizeNameList { get; set; } = null;
         
         public List<String> PrizeValueList { get; set; } = null;
 
 
-        public void OnGet()
+        public IActionResult OnGet()
         {
-        }
-        public IActionResult OnPost()
-        {
-            // Default, Not Used ATM
+            try
+            {
+                String CheckLogin = TempData["isLoggedin"].ToString();
+                TempData.Keep("isLoggedin");
+                if (CheckLogin == null || CheckLogin != "True")
+                {
+                    return RedirectToPage("./AdminLogin");
+                }
+                else
+                { return Page(); }
+            }
+            catch
+            {
+                // if any error, just return to login page
+                return RedirectToPage("./AdminLogin");
+            }
             
-            return Page();
+        }
+        public IActionResult OnPostLogout()
+        {
+            // Clear Data of we are loggin in
+            TempData.Remove("isLoggedin");
+            return RedirectToPage("./AdminLogin");
         }
         // Activates when Submit button on admin page is clicked.
         public IActionResult OnPostSubmit()
@@ -54,6 +68,9 @@ namespace HousePointsApp
             AdminDataService IfaceAdmin = new AdminDataService();
             bool success = true;
             bool defaultCase = false;
+            TempData.Keep("Action");
+            TempData.Keep("Actiontype");
+
             // Basic error checking, Need to reset TempData as well
             if (UID == "" || UID == null)
             {
@@ -65,9 +82,9 @@ namespace HousePointsApp
                 DisplayMessage = $"Error Occured due to Action not specified.";
                 return Page();
             }
-            if (ChangeValue <= 0 && (Action == "CheckBalance" || Action == "DeletePrize"))
+            if ( (ChangeValue <= 0) && !(Action == "CheckBalance" || Action == "DeletePrize"))
             {
-                DisplayMessage = $"Error Occured due Change Value too small. Please enter a valid number.";
+                DisplayMessage = $"Error Occured due Value <= 0. Please enter a valid number.";
                 PointMessage = $"Could not Complete Action, enter a positive number.";
                 return Page();
             }
@@ -96,7 +113,7 @@ namespace HousePointsApp
                             success = IfaceStudent.DeleteStudent(UID);
                             break;
                         default:
-                            DisplayMessage = $"Error Occured due to Action variable.";
+                            DisplayMessage = $"Error Occured due to Action variable undefined.";
                             PointMessage = $"Could not Complete Action";
                             defaultCase = true;
                             success = false;
@@ -106,7 +123,7 @@ namespace HousePointsApp
                     if (success)
                     {
                         PointMessage = $" {student.first_name} {student.last_name} has {IfaceAdmin.CheckPoints(UID).ToString()} Points";
-                        DisplayMessage = $"Action done with {Action} and student {student.first_name} {student.last_name}";
+                        DisplayMessage = $"Transaction success with {student.first_name} {student.last_name}";
                     }
                     else if (defaultCase)
                     {
@@ -114,7 +131,7 @@ namespace HousePointsApp
                     }
                     else
                     {
-                        DisplayMessage = $"Action Failed due to database operation issue";
+                        DisplayMessage = $"Action Failed due to database operation issue!";
                         PointMessage = $"Could not Complete Action";
                     }
                    
@@ -139,7 +156,7 @@ namespace HousePointsApp
                         success = IfaceAdmin.DeletePrize(UID);
                         break;
                     default:
-                        DisplayMessage = $"Error Occured due to Action variable.";
+                        DisplayMessage = $"Error Occured due to Action variable undefined.";
                         defaultCase = true;
                         success = false;
                         break;
@@ -148,7 +165,7 @@ namespace HousePointsApp
                 PrizeValueList = IfaceAdmin.GetAllPrizesValue();
                 if (success)
                 {
-                    PointMessage = $"Action Success with Prize {UID}";
+                    PointMessage = $"Transaction Success with Prize {UID}";
                 }
                 else if (defaultCase)
                 {
@@ -156,7 +173,7 @@ namespace HousePointsApp
                 }
                 else
                 {
-                    PointMessage = $"Action Failed due to database operation issue";
+                    DisplayMessage = $"Transaction Failed due to database operation issue! Check if Prize is valid.";
                 }
                 
             }
@@ -165,8 +182,7 @@ namespace HousePointsApp
                 DisplayMessage = $"Action Type Undefinied!";
                 
             }
-            TempData.Keep("Action");
-            TempData.Keep("Actiontype");
+            
             return Page();
         }
         public IActionResult OnPostCheckBalance()

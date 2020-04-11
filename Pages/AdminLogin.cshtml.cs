@@ -27,15 +27,15 @@ namespace HousePointsApp
         {
             bool isAdmin = false;
             AdminDataService IAdminService = new AdminDataService();
-
+            TempData.Remove("IsLoggedIn");
             if (UID == "" || UID == null)
             {
-                DisplayMessage = $"Error Occured due to ID/Prize Field Empty.";
+                DisplayMessage = $"Error Occured due to ID Field Empty.";
                 return Page();
             }
             if (password == "" || password == null)
             {
-                DisplayMessage = $"Error Occured due to Action not specified.";
+                DisplayMessage = $"Error Occured due to Password Field Empty.";
                 return Page();
             }
 
@@ -45,11 +45,12 @@ namespace HousePointsApp
             }
             if (isAdmin)
             {
+                TempData.TryAdd("IsLoggedIn", "True");
                 return RedirectToPage("./_Admin");
             }
             else
-            {
-                DisplayMessage = "ID/Password Invlaid";
+            {   
+                DisplayMessage = "ID/Password Invalid";
                 return Page();
             }
             
