@@ -20,75 +20,131 @@
                 <h4>Message: @Model.DisplayMessage</h4>
             }
         }
-        <form asp-page-handler="Submit" method="post" asp-antiforgery="true">
-            <div class="form-row text-left">
-                <div class="col">
-                    <div class="dropdown">
-                        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownActionMenu"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span id="selected">@Model.DropDownMessage</span>
-                            <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownActionMenu" role="menu">
-                            <li>
-                                <button class="btn btn-secondary" style="width:200px;" value="Check Point Balances" asp-page-handler="CheckBalance">Check Point Balances</button>
-                            </li>
-                            <li>
-                                <button class="btn btn-secondary" style="width:200px;" value="Increase/Award Points" asp-page-handler="IncreasePoint">Increase/Award Points</button>
-                            </li>
-                            <li>
-                                <button class="btn btn-secondary" style="width:200px;" value="Decrease/Redeem Points" asp-page-handler="DecreasePoint">Decrease/Redeem Points</button>
-                            </li>
-                            <li>
-                                <button class="btn btn-secondary" style="width:200px;" value="Set Point Balance" asp-page-handler="SetPoint">Set Point Balance</button>
-                            </li>
-                            <li>
-                                <button class="btn btn-secondary" style="width:200px;" value="Delete Account" asp-page-handler="DeleteAccount">Delete Account</button>
-                            </li>
-                        </ul>
-                    </div>
+        @{      
+            //Determine Message to display
+            String StudentActionMessage = "Student Actions";
+            String PrizeActionMessage = "Prize Actions";
+            String ValueFieldLabel = "Set Point to";
+            try
+            {
+                if (TempData["Action"] != null)
+                {
+                    String CurrentAction = TempData["Action"].ToString();
+                    TempData.Keep("Action");
+                    switch (CurrentAction)
+                    {
+                    case "CheckBalance":
+                        StudentActionMessage = "Check Point Balances";
+                        ValueFieldLabel = "No Input Needed";
+                        break;
+                    case "SetPoint":
+                        StudentActionMessage = "Set Point Balances";
+                        ValueFieldLabel = "Set Point to";
+                        break;
+                    case "IncreasePoint":
+                        StudentActionMessage = "Increase/Award Points";
+                        ValueFieldLabel = "Increase Point By";
+                        break;
+                    case "DecreasePoint":
+                        StudentActionMessage = "Decrease/Redeem Points";
+                        ValueFieldLabel = "Decrease Point by";
+                        break;
+                    case "DeleteAccount":
+                        StudentActionMessage = "Delete Account";
+                        ValueFieldLabel = "No Input Needed";
+                        break;
+                    case "SetPrize":
+                        PrizeActionMessage = "Set Value of Existing Prize";
+                        ValueFieldLabel = "Set Prize Value to";
+                        break;
+                    case "AddPrize":
+                        PrizeActionMessage = "Add New Prize";
+                        ValueFieldLabel = "Set Prize Value to";
+                        break;
+                    case "DeletePrize":
+                        PrizeActionMessage = "Delete Existing Prize";
+                        ValueFieldLabel = "No Input Needed";
+                        break;
+                    default:
+                        break;
+                    }
+                }
+            }
+            catch
+            {
+                // do nothing, use default value defined before;
+            }
 
-                    <div class="dropdown">
-                        <button class="btn btn-primary dropdown-toggle" type="button" id="prizeActionMenu"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span id="selected">@Model.PrizeMessage</span>
-                            <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="prizeActionMenu" role="menu">
-                            <li>
-                                <button class="btn btn-secondary" style="width:200px;" value="AddPrize" asp-page-handler="AddPrize">Add New Prize</button>
-                            </li>
-                            <li>
-                                <button class="btn btn-secondary" style="width:200px;" value="SetPrize" asp-page-handler="SetPrize">Set Value of Existing Prize</button>
-                            </li>
-                            <li>
-                                <button class="btn btn-secondary" style="width:200px;" value="DeletePrize" asp-page-handler="DeletePrize">Delete Existing Prize</button>
-                            </li>
-                        </ul>
-                    </div>
+            <form asp-page-handler="Submit" method="post" asp-antiforgery="true">
+                <div class="form-row text-left">
+                    <div class="col">
+                        <div class="dropdown">
+                            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownActionMenu"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span id="selected">@StudentActionMessage</span>
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownActionMenu" role="menu">
+                                <li>
+                                    <button class="btn btn-secondary" style="width:200px;" value="Check Point Balances" asp-page-handler="CheckBalance">Check Point Balances</button>
+                                </li>
+                                <li>
+                                    <button class="btn btn-secondary" style="width:200px;" value="Increase/Award Points" asp-page-handler="IncreasePoint">Increase/Award Points</button>
+                                </li>
+                                <li>
+                                    <button class="btn btn-secondary" style="width:200px;" value="Decrease/Redeem Points" asp-page-handler="DecreasePoint">Decrease/Redeem Points</button>
+                                </li>
+                                <li>
+                                    <button class="btn btn-secondary" style="width:200px;" value="Set Point Balance" asp-page-handler="SetPoint">Set Point Balance</button>
+                                </li>
+                                <li>
+                                    <button class="btn btn-secondary" style="width:200px;" value="Delete Account" asp-page-handler="DeleteAccount">Delete Account</button>
+                                </li>
+                            </ul>
+                        </div>
 
-                    <div class="row">
-                        <label asp-for="UID">Student/Prize to work on:</label>
-                        <input asp-for="UID" type="text" placeholder="Enter Here" />
-                    </div>
-                    <div class="row">
-                        <label for="">@Model.PointMessage</label>
-                    </div>
-                    <div class="row">
-                        <label asp-for="ChangeValue">@Model.ChangeValueLabel:</label>
-                        <input asp-for="ChangeValue" type="number"
-                               placeholder="Enter Value" />
-                    </div>
-                    <div class="row">
-                        <button class="btn btn-primary" ID="6" type="submit">Submit</button>
-                        <button class="btn btn-primary" type="reset">Reset</button>
-                    </div>
-                    <div class="row">
-                        <button class="btn btn-secondary" style="width:150px;" value="Logout" asp-page-handler="Logout">Logout</button>
+                        <div class="dropdown">
+                            <button class="btn btn-primary dropdown-toggle" type="button" id="prizeActionMenu"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span id="selected">@PrizeActionMessage</span>
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="prizeActionMenu" role="menu">
+                                <li>
+                                    <button class="btn btn-secondary" style="width:200px;" value="AddPrize" asp-page-handler="AddPrize">Add New Prize</button>
+                                </li>
+                                <li>
+                                    <button class="btn btn-secondary" style="width:200px;" value="SetPrize" asp-page-handler="SetPrize">Set Value of Existing Prize</button>
+                                </li>
+                                <li>
+                                    <button class="btn btn-secondary" style="width:200px;" value="DeletePrize" asp-page-handler="DeletePrize">Delete Existing Prize</button>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="row">
+                            <label asp-for="UID">Student/Prize to work on:</label>
+                            <input asp-for="UID" type="text" placeholder="Enter Here" />
+                        </div>
+                        <div class="row">
+                            <label for="">@Model.PointMessage</label>
+                        </div>
+                        <div class="row">
+                            <label asp-for="ChangeValue">@ValueFieldLabel:</label>
+                            <input asp-for="ChangeValue" type="number"
+                                   placeholder="Enter Value" />
+                        </div>
+                        <div class="row">
+                            <button class="btn btn-primary" ID="6" type="submit">Submit</button>
+                            <button class="btn btn-primary" type="reset">Reset</button>
+                        </div>
+                        <div class="row">
+                            <button class="btn btn-secondary" style="width:150px;" value="Logout" asp-page-handler="Logout">Logout</button>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </form>
+            </form>
+        }
         @if (Model.PrizeNameList != null && Model.PrizeValueList != null)
         {
             <div class="container mb-5 mt-3">
@@ -101,14 +157,14 @@
                             <th>Points Value</th>
                         </tr>
                     </thead>
-                    <tbody>      
-                    @for(var i = 0; i < Model.PrizeNameList.Count(); i++)
-                    {
-                        <tr>
-                            <th>@Model.PrizeNameList[i]</th>
-                            <th>@Model.PrizeValueList[i]</th>
-                        </tr>
-                    } 
+                    <tbody>
+                        @for (var i = 0; i < Model.PrizeNameList.Count(); i++)
+                        {
+                            <tr>
+                                <th>@Model.PrizeNameList[i]</th>
+                                <th>@Model.PrizeValueList[i]</th>
+                            </tr>
+                        }
                     </tbody>
                     <tfoot></tfoot>
                 </table>

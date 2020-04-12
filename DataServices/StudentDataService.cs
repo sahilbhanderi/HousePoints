@@ -203,10 +203,10 @@ namespace HousePointsApp.DataServices
             cnn.Open();
 
             String deleteAttendanceSql = "DELETE FROM attendance WHERE " +
-                "'campus_id'= " + userId + ";";
+                "campus_id = '" + userId + "';";
 
             String deleteStudentSql = "DELETE FROM student WHERE " +
-                "'campus_id'= " + userId + ";";
+                "campus_id = '" + userId + "';";
 
             SqlCommand deleteAttendanceCommand = new SqlCommand(deleteAttendanceSql, cnn);
             SqlCommand deleteStudentCommand = new SqlCommand(deleteStudentSql, cnn);

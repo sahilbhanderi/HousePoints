@@ -25,9 +25,6 @@ namespace HousePointsApp
 
         [BindProperty]
         public int ChangeValue { get; set; } = 0;
-        public string DropDownMessage { get; set; } = "Student Actions";
-        public string PrizeMessage { get; set; } = "Prize Actions";
-        public string ChangeValueLabel { get; set; } = "Set Point to";
 
         public string PointMessage { get; set; } = "";
         
@@ -60,6 +57,8 @@ namespace HousePointsApp
         {
             // Clear Data of we are loggin in
             TempData.Remove("isLoggedin");
+            TempData.Remove("Action");
+            TempData.Remove("Actiontype");
             return RedirectToPage("./AdminLogin");
         }
         // Activates when Submit button on admin page is clicked.
@@ -82,7 +81,7 @@ namespace HousePointsApp
                 DisplayMessage = $"Error Occured due to Action not specified.";
                 return Page();
             }
-            if ( (ChangeValue <= 0) && !(Action == "CheckBalance" || Action == "DeletePrize"))
+            if ( (ChangeValue <= 0) && !(Action == "CheckBalance" || Action == "DeletePrize" || Action == "DeleteAccount"))
             {
                 DisplayMessage = $"Error Occured due Value <= 0. Please enter a valid number.";
                 PointMessage = $"Could not Complete Action, enter a positive number.";
@@ -110,7 +109,7 @@ namespace HousePointsApp
                             success = IfaceAdmin.SetPoints(UID, ChangeValue);
                             break;
                         case "DeleteAccount":
-                            success = IfaceStudent.DeleteStudent(UID);
+                            success = IfaceStudent.DeleteStudent(student.campus_id);
                             break;
                         default:
                             DisplayMessage = $"Error Occured due to Action variable undefined.";
@@ -121,8 +120,11 @@ namespace HousePointsApp
                     }
 
                     if (success)
-                    {
-                        PointMessage = $" {student.first_name} {student.last_name} has {IfaceAdmin.CheckPoints(UID).ToString()} Points";
+                    {   
+                        if (Action != "DeleteAccount") 
+                        {
+                            PointMessage = $" {student.first_name} {student.last_name} has {IfaceAdmin.CheckPoints(UID).ToString()} Points";
+                        }
                         DisplayMessage = $"Transaction success with {student.first_name} {student.last_name}";
                     }
                     else if (defaultCase)
@@ -189,9 +191,6 @@ namespace HousePointsApp
         {
             TempData.Remove("Action");
             TempData.Remove("Actiontype");
-            DropDownMessage = "Check Point Balances";
-            
-            ChangeValueLabel = "No Input Needed";
             
             TempData["Action"]= "CheckBalance";
             TempData["Actiontype"] = "User";
@@ -204,9 +203,6 @@ namespace HousePointsApp
         {
             TempData.Remove("Action");
             TempData.Remove("Actiontype");
-            DropDownMessage = "Increase/Award Points";
-
-            ChangeValueLabel = "Increase Point By";
 
             TempData["Action"] = "IncreasePoint";
             TempData["Actiontype"] = "User";
@@ -216,9 +212,6 @@ namespace HousePointsApp
         {
             TempData.Remove("Action");
             TempData.Remove("Actiontype");
-            DropDownMessage = "Decrease/Redeem Points";
-
-            ChangeValueLabel = "Decrease Point by";
 
             TempData["Action"] = "DecreasePoint";
             TempData["Actiontype"] = "User";
@@ -228,9 +221,6 @@ namespace HousePointsApp
         {
             TempData.Remove("Action");
             TempData.Remove("Actiontype");
-            DropDownMessage = "Set Point Balances";
-
-            ChangeValueLabel = "Set Point to";
             TempData["Action"] = "SetPoint";
             TempData["Actiontype"] = "User";
             return Page();
@@ -239,9 +229,6 @@ namespace HousePointsApp
         {
             TempData.Remove("Action");
             TempData.Remove("Actiontype");
-            DropDownMessage = "Delete Account";
-
-            ChangeValueLabel = "No Input Needed";
 
             TempData["Action"] = "DeleteAccount";
             TempData["Actiontype"] = "User";
@@ -260,9 +247,6 @@ namespace HousePointsApp
             {
                 DisplayMessage = "Error Retrieving Prize List from Database!";
             }
-            ChangeValueLabel = "Set Prize Value to";
-
-            PrizeMessage = "Set Value of Existing Prize";
             
             TempData["Action"] = "SetPrize";
             TempData["Actiontype"] = "Prize";
@@ -279,9 +263,6 @@ namespace HousePointsApp
             {
                 DisplayMessage = "Error Retrieving Prize List from Database!";
             }
-            PrizeMessage = "Add New Prize";
-
-            ChangeValueLabel = "Set New Prize Value to";
             TempData["Action"] = "AddPrize";
             TempData["Actiontype"] = "Prize";
             return Page();
@@ -297,10 +278,6 @@ namespace HousePointsApp
             {
                 DisplayMessage = "Error Retrieving Prize List from Database!";
             }
-            PrizeMessage = "Delete Existing Prize";
-
-            ChangeValueLabel = "No Input Needed";
-
             TempData["Action"] = "DeletePrize";
             TempData["Actiontype"] = "Prize";
             return Page();
