@@ -59,7 +59,7 @@ namespace HousePointsApp
 
             Student student = sds.GetStudent(studentId);
 
-            if (student.student_id == null) // new student swipes id card
+            if (student == null) // new student swipes id card
             {
                 if (sds.CreateStudent(studentId) && ads.CreateAttendance(studentId))
                 {
@@ -77,7 +77,27 @@ namespace HousePointsApp
             {
                 Attendance attendance = ads.GetLatestAttendance(studentId);
 
-                if (attendance.check_out == null) // student has not yet signed out
+                if ((attendance.check_in != null) && (attendance.check_out != null))
+                {
+                    if (ads.CreateAttendance(studentId))
+                        message = "Hi " + student.first_name + ", you have signed " +
+                            "into the Learning Factory. Have fun building!  You currently have "
+                            + student.total_points + " points.";
+                    else
+                        message = "An error occurred when processing your card. Please try again or " +
+                            "find a staff member if error continues to occur.";
+                }
+
+                else
+                {
+                    if (ads.UpdateSession(attendance.session_id.ToString()))
+                        message = "You have been signed out. Thanks for coming " +
+                            student.first_name + "!";
+                    else
+                        message = "An error occurred when processing your card. Please try again or " +
+                            "find a staff member if error continues to occur.";
+                }
+                /*if (attendance.check_out == null) // student has not yet signed out
                 {
                     if (ads.UpdateSession(attendance.session_id.ToString()))
                         message = "You have been signed out. Thanks for coming " +
@@ -96,7 +116,7 @@ namespace HousePointsApp
                     else
                         message = "An error occurred when processing your card. Please try again or " +
                             "find a staff member if error continues to occur.";
-                }
+                }*/
             }
 
 

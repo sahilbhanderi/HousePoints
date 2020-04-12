@@ -17,7 +17,7 @@ namespace HousePointsApp.DataServices
     {
         private String CONNECTION_STRING = @"Data Source=(localdb)\MSSQLLocalDB; 
                                              Initial Catalog = The_Learning_Factory_Points_System;";
-        //private String CONNECTION_STRING = @"Data Source=localhost;Initial Catalog=The_Learning_Factory_Points_System;" +
+        //private String CONNECTION_STRING = @"Data Source=localhost;Initial Catalog=The_Learning_Factory_Points_System;";
         //    "User ID=sa;Password=YourPasswordHere";
 
         public String GetFirstName(String studentId)
@@ -136,6 +136,30 @@ namespace HousePointsApp.DataServices
 
         public Boolean CreateStudent(String studentId)
         {
+            SqlConnection cnn = new SqlConnection(CONNECTION_STRING);
+            cnn.Open();
+
+            //Check if student valid first
+            String checkValidStudent = "SELECT * FROM View_Students WHERE student_id = '" + studentId + "';";
+
+            SqlCommand checkValidStudentCommand = new SqlCommand(checkValidStudent, cnn);
+            try
+            {
+                SqlDataReader checkValidStudentReader = checkValidStudentCommand.ExecuteReader();
+                if (checkValidStudentReader.HasRows == false) //Student DNE in psu server
+                {
+                    cnn.Close();
+                    return false;
+                }
+
+            }
+            catch (SqlException e)
+            {
+                Console.WriteLine(e.ToString());
+
+                cnn.Close();
+                return false;
+            }
             // Get first name, last name, and campus id for corresponding
             // student id
 
@@ -144,9 +168,6 @@ namespace HousePointsApp.DataServices
             String campus_id = GetCampusId(studentId);
 
             // Create and execute a SQL query to create a new student record
-
-            SqlConnection cnn = new SqlConnection(CONNECTION_STRING);
-            cnn.Open();
 
             String insertStudentSql = "INSERT INTO STUDENT " +
                 "(student_id, campus_id, first_name, last_name, total_points) " +
