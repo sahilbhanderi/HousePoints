@@ -17,7 +17,6 @@ namespace HousePointsApp
 
         [BindProperty]
         public string password { get; set; } ="";
-        [TempData]
         public string DisplayMessage { get; set; } = "";
         public void OnGet()
         {
