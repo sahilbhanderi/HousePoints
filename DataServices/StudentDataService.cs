@@ -15,10 +15,10 @@ namespace HousePointsApp.DataServices
 {
     public class StudentDataService : IStudentDataService
     {
-        private String CONNECTION_STRING = @"Data Source=(localdb)\MSSQLLocalDB; 
-                                             Initial Catalog = The_Learning_Factory_Points_System;";
-        //private String CONNECTION_STRING = @"Data Source=localhost;Initial Catalog=The_Learning_Factory_Points_System;" +
-        //    "User ID=sa;Password=YourPasswordHere";
+        //private String CONNECTION_STRING = @"Data Source=(localdb)\MSSQLLocalDB; 
+        //                                     Initial Catalog = The_Learning_Factory_Points_System;";
+        private String CONNECTION_STRING = @"Data Source=localhost;Initial Catalog=The_Learning_Factory_Points_System;" +
+            "User ID=sa;Password=YourPasswordHere";
 
         public String GetFirstName(String studentId)
         {
@@ -271,8 +271,6 @@ namespace HousePointsApp.DataServices
             SqlConnection cnn = new SqlConnection(CONNECTION_STRING);
             cnn.Open();
 
-            // Check that there are 
-
             // Set up query that will get list of houses and their points in
             // descending order
 
@@ -310,6 +308,46 @@ namespace HousePointsApp.DataServices
             }
 
             return (housePoints, houses_filled);
+        }
+
+        public List<(String campus_id, String house)> GetHouseAssignments()
+        {
+            // Open a connection to the SQL server
+
+            SqlConnection cnn = new SqlConnection(CONNECTION_STRING);
+            cnn.Open();
+
+            // Set up query to get student campus_ids and house assignments
+
+            String getHouses = "SELECT campus_id, house_assignment FROM student " +
+                "ORDER BY campus_id";
+            SqlCommand getHousesCommand = new SqlCommand(getHouses, cnn);
+
+            List<(String campus_id, String house)> houseList = new List<(String campus_id, String house)>();
+
+            try
+            {
+                SqlDataReader getHousesReader = getHousesCommand.ExecuteReader();
+                while (getHousesReader.Read())
+                {
+                    (String id, String assignment) temp;
+
+                    temp.id = getHousesReader.GetValue(0).ToString();
+                    temp.assignment = getHousesReader.GetValue(1).ToString();
+
+                    houseList.Add(temp);
+                }
+                cnn.Close();
+            }
+            catch (SqlException e)
+            {
+                Console.WriteLine(e.ToString());
+
+                cnn.Close();
+                return null;
+            }
+
+            return houseList;
         }
     }
 }

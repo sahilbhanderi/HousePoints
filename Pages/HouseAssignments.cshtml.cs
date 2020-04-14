@@ -10,22 +10,23 @@ using HousePointsApp.Interfaces;
 
 namespace HousePointsApp
 {
-    public class LeaderBoardModel : PageModel
+    public class HouseAssignmentsModel : PageModel
     {
-        public List<Student> TopFiveStudent;
-        
+        public List<(String campus_id, String house)> HouseAssignments;
+
         public string DisplayMessage;
         public void OnGet()
         {
-            StudentDataService IfaceStudent = new StudentDataService();
-            TopFiveStudent = IfaceStudent.GetTopFiveScoringStudent();
-            if (TopFiveStudent == null)
+            StudentDataService sds = new StudentDataService();
+            HouseAssignments = sds.GetHouseAssignments();
+
+            if (HouseAssignments == null)
             {
-                DisplayMessage = "Error Obtaining Student Records from the Database.";
+                DisplayMessage = "Error Obtaining Records from the Database.";
             }
             else
             {
-                DisplayMessage = "Top Five Overall Students";
+                DisplayMessage = "Student House Assignments";
             }
         }
     }
