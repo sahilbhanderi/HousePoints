@@ -4,8 +4,8 @@
     ViewData["Title"] = "AdminLogin";
 }
     <div class="container-fluid">
-        <h1>Welcome to Learning Factory</h1>
-        <h3>Staff/Admin Login Page</h3>
+        <h1>Welcome to Learning Factory Admin Page</h1>
+        <p>If you are not a Learning Factory administrator, please return to the student login page</p>
 
        @{ 
            if (Model.DisplayMessage != null & Model.DisplayMessage != "")
@@ -18,19 +18,19 @@
             <div class="form-row text-left">
                 <div class="col">
 
-                    <div class="row">
+                    <div class="row" style="margin:20px">
                         <label asp-for="UID">Admin ID:</label>
                         <input asp-for="UID" type="text" placeholder="Admin ID Here" />
                     </div>
 
-                    <div class="row">
+                    <div class="row" style="margin:20px">
                         <label asp-for="password">Password:</label>
                         <input asp-for="password" type="text"
                                placeholder="Enter Value" />
                     </div>
-                    <div class="row">
-                        <button class="btn btn-primary" ID="6" type="submit">Submit</button>
-                        <button class="btn btn-primary" type="reset">Reset</button>
+                    <div class="row" style="margin:20px">
+                        <button class="btn btn-primary" ID="6" type="submit" style="margin:20px">Submit</button>
+                        <button class="btn btn-primary" type="reset" style="margin:20px">Reset</button>
                     </div>
                 </div>
             </div>

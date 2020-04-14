@@ -75,61 +75,81 @@
                 // do nothing, use default value defined before;
             }
 
+            <p>The two dropdowns below have a list of actions related to managing student data and prize data respectively.
+                Once you select the action you'd like to complete, enter the ID for the student/prize you are working with
+                and the prompted input in the text boxes below.</p>
+
             <form asp-page-handler="Submit" method="post" asp-antiforgery="true">
                 <div class="form-row text-left">
-                    <div class="col">
-                        <div class="dropdown">
-                            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownActionMenu"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span id="selected">@StudentActionMessage</span>
-                                <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu" aria-labelledby="dropdownActionMenu" role="menu">
-                                <li>
-                                    <button class="btn btn-secondary" style="width:200px;" value="Check Point Balances" asp-page-handler="CheckBalance">Check Point Balances</button>
-                                </li>
-                                <li>
-                                    <button class="btn btn-secondary" style="width:200px;" value="Increase/Award Points" asp-page-handler="IncreasePoint">Increase/Award Points</button>
-                                </li>
-                                <li>
-                                    <button class="btn btn-secondary" style="width:200px;" value="Decrease/Redeem Points" asp-page-handler="DecreasePoint">Decrease/Redeem Points</button>
-                                </li>
-                                <li>
-                                    <button class="btn btn-secondary" style="width:200px;" value="Set Point Balance" asp-page-handler="SetPoint">Set Point Balance</button>
-                                </li>
-                                <li>
-                                    <button class="btn btn-secondary" style="width:200px;" value="Delete Account" asp-page-handler="DeleteAccount">Delete Account</button>
-                                </li>
-                            </ul>
-                        </div>
-
-                        <div class="dropdown">
-                            <button class="btn btn-primary dropdown-toggle" type="button" id="prizeActionMenu"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span id="selected">@PrizeActionMessage</span>
-                                <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu" aria-labelledby="prizeActionMenu" role="menu">
-                                <li>
-                                    <button class="btn btn-secondary" style="width:200px;" value="AddPrize" asp-page-handler="AddPrize">Add New Prize</button>
-                                </li>
-                                <li>
-                                    <button class="btn btn-secondary" style="width:200px;" value="SetPrize" asp-page-handler="SetPrize">Set Value of Existing Prize</button>
-                                </li>
-                                <li>
-                                    <button class="btn btn-secondary" style="width:200px;" value="DeletePrize" asp-page-handler="DeletePrize">Delete Existing Prize</button>
-                                </li>
-                            </ul>
-                        </div>
-
+                    <div class="column">
                         <div class="row">
-                            <label asp-for="UID">Student/Prize to work on:</label>
+                            <div class="dropdown">
+                                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownActionMenu"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span id="selected">@StudentActionMessage</span>
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownActionMenu" role="menu">
+                                    <li>
+                                        <button class="btn btn-secondary" style="width:200px;" value="Check Point Balances" asp-page-handler="CheckBalance">Check Point Balances</button>
+                                    </li>
+                                    <li>
+                                        <button class="btn btn-secondary" style="width:200px;" value="Increase/Award Points" asp-page-handler="IncreasePoint">Increase/Award Points</button>
+                                    </li>
+                                    <li>
+                                        <button class="btn btn-secondary" style="width:200px;" value="Decrease/Redeem Points" asp-page-handler="DecreasePoint">Decrease/Redeem Points</button>
+                                    </li>
+                                    <li>
+                                        <button class="btn btn-secondary" style="width:200px;" value="Set Point Balance" asp-page-handler="SetPoint">Set Point Balance</button>
+                                    </li>
+                                    <li>
+                                        <button class="btn btn-secondary" style="width:200px;" value="Delete Account" asp-page-handler="DeleteAccount">Delete Account</button>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <style>
+                                .btn-primary
+                                {
+                                    margin:20px;
+                                }
+                                .btn-secondary
+                                {
+                                    margin:20px;
+                                }
+                             </style>
+                           
+
+                            <div class="dropdown">
+                                <button class="btn btn-primary dropdown-toggle" type="button" id="prizeActionMenu"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span id="selected">@PrizeActionMessage</span>
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="prizeActionMenu" role="menu">
+                                    <li>
+                                        <button class="btn btn-secondary" style="width:200px;" value="AddPrize" asp-page-handler="AddPrize">Add New Prize</button>
+                                    </li>
+                                    <li>
+                                        <button class="btn btn-secondary" style="width:200px;" value="SetPrize" asp-page-handler="SetPrize">Set Value of Existing Prize</button>
+                                    </li>
+                                    <li>
+                                        <button class="btn btn-secondary" style="width:200px;" value="DeletePrize" asp-page-handler="DeletePrize">Delete Existing Prize</button>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                       
+
+                        <div class="row" style="margin:20px">
+                            <label asp-for="UID">Student/Prize ID:</label>
                             <input asp-for="UID" type="text" placeholder="Enter Here" />
                         </div>
                         <div class="row">
                             <label for="">@Model.PointMessage</label>
                         </div>
-                        <div class="row">
+                        <div class="row" style="margin:20px">
                             <label asp-for="ChangeValue">@ValueFieldLabel:</label>
                             <input asp-for="ChangeValue" type="number"
                                    placeholder="Enter Value" />
