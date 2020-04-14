@@ -1,0 +1,32 @@
+﻿@page
+@model HousePointsApp.HouseAssignmentsModel
+@{
+    ViewData["Title"] = "HouseAssignments";
+}
+
+<h2>House Points Scoreboard</h2>
+<h4>@Model.DisplayMessage</h4>
+@if (Model.HouseAssignments != null)
+{
+    <div class="container mb-5 mt-3">
+        <table class="table table-striped table-bordered" style="width: 100%">
+            <thead>
+                <tr>
+                    <th>Student Access ID</th>
+                    <th>House Assignment</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (var i = 0; i < @Model.HouseAssignments.Count; i++)
+                {
+                    <tr>
+                        <th>@Model.HouseAssignments[i].campus_id</th>
+                        <th>@Model.HouseAssignments[i].house</th>
+                    </tr>
+                }
+            </tbody>
+            <tfoot></tfoot>
+        </table>
+
+    </div>
+}
