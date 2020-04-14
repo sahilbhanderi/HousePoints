@@ -11,7 +11,7 @@ namespace HousePointsApp.DataServices
         // Make sure to update to your own db name
         private String CONNECTION_STRING = @"Data Source=(localdb)\MSSQLLocalDB; 
                                              Initial Catalog = The_Learning_Factory_Points_System;";
-        //private String CONNECTION_STRING = @"Data Source=localhost;Initial Catalog=The_Learning_Factory_Points_System;";
+        //private String CONNECTION_STRING = @"Data Source=localhost;Initial Catalog=The_Learning_Factory_Points_System;" +
         //    "User ID=sa;Password=YourPasswordHere";
         public int CheckPoints(String studentId)
         {

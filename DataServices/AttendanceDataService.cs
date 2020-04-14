@@ -9,7 +9,7 @@ namespace HousePointsApp.DataServices
     {
         private String CONNECTION_STRING = @"Data Source=(localdb)\MSSQLLocalDB; 
                                              Initial Catalog = The_Learning_Factory_Points_System;";
-        //private String CONNECTION_STRING = @"Data Source=localhost;Initial Catalog=The_Learning_Factory_Points_System;";
+        //private String CONNECTION_STRING = @"Data Source=localhost;Initial Catalog=The_Learning_Factory_Points_System;" +
         //    "User ID=sa;Password=YourPasswordHere";
 
         public String GetCampusId(String studentId)

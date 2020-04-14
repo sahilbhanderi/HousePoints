@@ -10,9 +10,10 @@ namespace HousePointsApp.Interfaces
         public String GetLastName(String studentId);
         public String GetCampusId(String studentId);
         public Student GetStudent(String studentId);
-        public Boolean CreateStudent(String studentId);
+        public Boolean CreateStudent(String studentId, String house);
         public Boolean DeleteStudent(String campusId);
 
         public List<Student> GetTopFiveScoringStudent();
+        public (List<House>, int) GetHousePoints();
     }
 }

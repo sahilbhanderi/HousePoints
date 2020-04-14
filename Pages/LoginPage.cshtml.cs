@@ -47,6 +47,25 @@ namespace HousePointsApp
             return RedirectToPage("./Response/_LoginSuccess", "Display", new { text = Text });
         }
 
+        // Function that will randomly assign new students to a house. The four
+        // house options are: Nittany House, Atherton House, Schreyer House, Beaver House
+
+        public String HouseAssignment()
+        {
+            // Create a random generator
+            Random ran = new Random();
+            int num = ran.Next(4);
+
+            if (num == 0)
+                return "Nittany House";
+            else if (num == 1)
+                return "Atherton House";
+            else if (num == 2)
+                return "Schreyer House";
+            else
+                return "Beaver House";
+        }
+
         // ProcessSwipe handles the workflow for a student swiping their id
         // card at the Learning Factory.
 
@@ -61,12 +80,14 @@ namespace HousePointsApp
 
             if (student == null) // new student swipes id card
             {
-                if (sds.CreateStudent(studentId) && ads.CreateAttendance(studentId))
+                String house_assignment = HouseAssignment();
+
+                if (sds.CreateStudent(studentId, house_assignment) && ads.CreateAttendance(studentId))
                 {
-                    student = sds.GetStudent(studentId);
                     message = "Welcome to the Learning Factory! " +
-                        "This is your first time signing in. We have created a new profile for you. " +
-                        "Have fun building!";
+                        "Your house assignment is " + house_assignment +
+                        ". Please see our FAQ page if you have questions about this house " +
+                        "assignment or the point tracking process.";
                 }
                 else
                     message = "An error occurred when processing your card. Please try again or " +
@@ -81,8 +102,8 @@ namespace HousePointsApp
                 {
                     if (ads.CreateAttendance(studentId))
                         message = "Hi " + student.first_name + ", you have signed " +
-                            "into the Learning Factory. Have fun building!  You currently have "
-                            + student.total_points + " points.";
+                            "into the Learning Factory. You currently have "
+                            + student.total_points + " points. Have fun building!";
                     else
                         message = "An error occurred when processing your card. Please try again or " +
                             "find a staff member if error continues to occur.";
@@ -91,37 +112,16 @@ namespace HousePointsApp
                 else
                 {
                     if (ads.UpdateSession(attendance.session_id.ToString()))
-                        message = "You have been signed out. Thanks for coming " +
-                            student.first_name + "!";
+                        message = "You have been signed out. You received " +
+                            ads.GetLatestAttendance(studentId).session_points + " points for this visit, " +
+                            " and you have " + sds.GetStudent(studentId).total_points + " points " +
+                            "total. Thanks for coming " + student.first_name + "!";
                     else
                         message = "An error occurred when processing your card. Please try again or " +
                             "find a staff member if error continues to occur.";
                 }
-                /*if (attendance.check_out == null) // student has not yet signed out
-                {
-                    if (ads.UpdateSession(attendance.session_id.ToString()))
-                        message = "You have been signed out. Thanks for coming " +
-                            student.first_name+"!";
-                    else
-                        message = "An error occurred when processing your card. Please try again or " +
-                            "find a staff member if error continues to occur.";
-                }
-
-                else // student has no open attendance sessions
-                {
-                    if (ads.CreateAttendance(studentId))
-                        message = "Hi " + student.first_name + ", you have signed " +
-                            "into the Learning Factory. Have fun building!  You currently have "
-                            + student.total_points + " points.";
-                    else
-                        message = "An error occurred when processing your card. Please try again or " +
-                            "find a staff member if error continues to occur.";
-                }*/
             }
-
-
             return message;
         }
     }
 }
-
