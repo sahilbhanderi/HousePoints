@@ -19,7 +19,7 @@
                 </tr>
             </thead>
             <tbody>
-                @for (var i = 0; i < 5; i++)
+                @for (var i = 0; i < Model.TopFiveStudent.Count; i++)
                 {
                     <tr>
                         <th>@Model.TopFiveStudent[i].first_name @Model.TopFiveStudent[i].last_name</th>

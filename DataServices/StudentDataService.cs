@@ -231,6 +231,7 @@ namespace HousePointsApp.DataServices
             }
         }
 
+        // Return the five student with highest points, if there is less than 5 return all students available.
         public List<Student> GetTopFiveScoringStudent()
         {
             SqlConnection cnn = new SqlConnection(CONNECTION_STRING);
