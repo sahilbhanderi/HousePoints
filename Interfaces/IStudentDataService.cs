@@ -15,5 +15,6 @@ namespace HousePointsApp.Interfaces
 
         public List<Student> GetTopFiveScoringStudent();
         public (List<House>, int) GetHousePoints();
+        public List<(String campus_id, String house)> GetHouseAssignments();
     }
 }
