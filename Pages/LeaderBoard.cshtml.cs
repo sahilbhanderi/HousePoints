@@ -25,7 +25,7 @@ namespace HousePointsApp
             }
             else
             {
-                DisplayMessage = "Top Five Scoring Student at the moment";
+                DisplayMessage = "Current Top Five Scoring Students";
             }
         }
     }
