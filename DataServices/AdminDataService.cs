@@ -1,18 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.IO;
 using HousePointsApp.Interfaces;
 using HousePointsApp.Models;
+using Newtonsoft.Json;
 
 namespace HousePointsApp.DataServices
 {
     public class AdminDataService : IAdminDataService
     {
-        // Make sure to update to your own db name
-        private String CONNECTION_STRING = @"Data Source=(localdb)\MSSQLLocalDB; 
-                                             Initial Catalog = The_Learning_Factory_Points_System;";
-        //private String CONNECTION_STRING = @"Data Source=localhost;Initial Catalog=The_Learning_Factory_Points_System;" +
-        //    "User ID=sa;Password=YourPasswordHere";
+        private String CONNECTION_STRING = @GetConnectionString();
+
+        private static String GetConnectionString()
+        {
+            String json = File.ReadAllText("appsettings.json");
+
+            // Query LionPath view for student's first name
+            object v = JsonConvert.DeserializeObject(json);
+            dynamic array = v;
+            String CONNECTION_STRING = array["DB_CONNECTION_STRING"];
+            return CONNECTION_STRING;
+        }
+
         public int CheckPoints(String studentId)
         {
             SqlConnection cnn = new SqlConnection(CONNECTION_STRING);
@@ -29,21 +39,21 @@ namespace HousePointsApp.DataServices
             {
                 while (getStudentReader.Read())
                 {
-                    student.total_points = Convert.ToInt32(getStudentReader.GetValue(4)); 
+                    student.total_points = Convert.ToInt32(getStudentReader.GetValue(4));
                 }
                 cnn.Close();
             }
             else
             {
                 cnn.Close();
-                    
+
                 student.total_points = -1;
             }
             return student.total_points;
         }
 
         public Boolean IncrementPoints(String studentId, int point)
-        { 
+        {
             int student_points = CheckPoints(studentId);
             if (student_points == -1)
             {
@@ -81,7 +91,7 @@ namespace HousePointsApp.DataServices
             {
                 return false;
             }
-            student_points-= point;
+            student_points -= point;
 
             SqlConnection cnn = new SqlConnection(CONNECTION_STRING);
             cnn.Open();
@@ -134,13 +144,13 @@ namespace HousePointsApp.DataServices
             }
         }
 
-        public Boolean AddAccount(String studentID, String firstName, String lastName) 
+        public Boolean AddAccount(String studentID, String firstName, String lastName)
         {
             SqlConnection cnn = new SqlConnection(CONNECTION_STRING);
             cnn.Open();
 
-            String addStudentSql = "INSERT INTO student (student_id, first_name, last_name, current_points) "+
-                "VALUES(" + studentID + ", '" + firstName + "', '" + lastName +"', 0);";
+            String addStudentSql = "INSERT INTO student (student_id, first_name, last_name, current_points) " +
+                "VALUES(" + studentID + ", '" + firstName + "', '" + lastName + "', 0);";
 
             SqlCommand addStudentCommand = new SqlCommand(addStudentSql, cnn);
 
@@ -165,7 +175,7 @@ namespace HousePointsApp.DataServices
             SqlConnection cnn = new SqlConnection(CONNECTION_STRING);
             cnn.Open();
 
-            String addPrizeSql = "INSERT INTO prizes (prize_name, point_value) "+
+            String addPrizeSql = "INSERT INTO prizes (prize_name, point_value) " +
                 "VALUES('" + prize + "', " + pointValue + ");";
 
             SqlCommand addPrizeCommand = new SqlCommand(addPrizeSql, cnn);
@@ -195,8 +205,8 @@ namespace HousePointsApp.DataServices
 
             SqlCommand deletePrizeCommand = new SqlCommand(deletePrizeSql, cnn);
 
-             try
-             {
+            try
+            {
                 if (CheckPrizeExist(prize))
                 {
                     deletePrizeCommand.ExecuteNonQuery();
@@ -206,8 +216,8 @@ namespace HousePointsApp.DataServices
                 {
                     return false;
                 }
-             }
-             catch (SqlException e)
+            }
+            catch (SqlException e)
             {
                 Console.WriteLine(e.ToString());
 
@@ -216,17 +226,17 @@ namespace HousePointsApp.DataServices
             }
         }
 
-        public Boolean UpdatePrizePoints(String prize, int prizePoints) 
+        public Boolean UpdatePrizePoints(String prize, int prizePoints)
         {
             SqlConnection cnn = new SqlConnection(CONNECTION_STRING);
             cnn.Open();
-           
+
             String Set_Points = "UPDATE prizes SET point_value = " +
                 prizePoints + " WHERE prize_name = '" + prize + "';";
             SqlCommand Set_Points_Command = new SqlCommand(Set_Points, cnn);
 
-              try
-              { 
+            try
+            {
                 if (CheckPrizeExist(prize))
                 {
                     Set_Points_Command.ExecuteNonQuery();
@@ -236,16 +246,16 @@ namespace HousePointsApp.DataServices
                 {
                     return false;
                 }
-                  
-              }
-              catch (SqlException e)
+
+            }
+            catch (SqlException e)
             {
                 Console.WriteLine(e.ToString());
 
                 cnn.Close();
                 return false;
             }
-          
+
         }
 
         public Boolean CheckPrizeExist(String prize)
@@ -270,18 +280,19 @@ namespace HousePointsApp.DataServices
             SqlConnection cnn = new SqlConnection(CONNECTION_STRING);
             cnn.Open();
             String getAllPrizeSql = "SELECT prize_name FROM PRIZES ORDER BY prize_id ASC;";
-            List<String>PrizeList = new List<String>();
-            
+            List<String> PrizeList = new List<String>();
+
             SqlCommand getAllPrizeCommand = new SqlCommand(getAllPrizeSql, cnn);
             SqlDataReader getAllPrizeReader = getAllPrizeCommand.ExecuteReader();
             // if there is rows, means read success, then get points
             if (getAllPrizeReader.HasRows == true)
-            {   int count = 1;
+            {
+                int count = 1;
                 while (getAllPrizeReader.Read())
                 {
-                    PrizeList.Add( $"{getAllPrizeReader.GetValue(0).ToString()}");
+                    PrizeList.Add($"{getAllPrizeReader.GetValue(0).ToString()}");
                     count++;
-                                 
+
                 }
                 cnn.Close();
             }
@@ -323,8 +334,8 @@ namespace HousePointsApp.DataServices
         }
 
         public List<Student> GetAllStudents()
-            //Returns all students and their total points from the student table,
-            //null if table empty
+        //Returns all students and their total points from the student table,
+        //null if table empty
         {
             SqlConnection cnn = new SqlConnection(CONNECTION_STRING);
             cnn.Open();
@@ -350,7 +361,7 @@ namespace HousePointsApp.DataServices
                     cnn.Close();
                 }
             }
-            catch (SqlException e) 
+            catch (SqlException e)
             {
                 Console.WriteLine(e.ToString());
 

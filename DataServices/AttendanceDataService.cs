@@ -2,15 +2,26 @@ using System;
 using System.Data.SqlClient;
 using HousePointsApp.Interfaces;
 using HousePointsApp.Models;
+using System.IO;
+using Newtonsoft.Json;
 namespace HousePointsApp.DataServices
 
 {
     public class AttendanceDataService : IAttendanceDataService
     {
-        private String CONNECTION_STRING = @"Data Source=(localdb)\MSSQLLocalDB; 
-                                             Initial Catalog = The_Learning_Factory_Points_System;";
-        //private String CONNECTION_STRING = @"Data Source=localhost;Initial Catalog=The_Learning_Factory_Points_System;" +
-        //    "User ID=sa;Password=YourPasswordHere";
+        private String CONNECTION_STRING = @GetConnectionString();
+
+        private static String GetConnectionString()
+        {
+            String json = File.ReadAllText("appsettings.json");
+
+            // Query LionPath view for student's first name
+            object v = JsonConvert.DeserializeObject(json);
+            dynamic array = v;
+            String CONNECTION_STRING = array["DB_CONNECTION_STRING"];
+            return CONNECTION_STRING;
+        }
+
 
         public String GetCampusId(String studentId)
         {
@@ -86,7 +97,8 @@ namespace HousePointsApp.DataServices
             if (minutes > 30)
             {
                 session_points = hours + 1;
-            } else
+            }
+            else
             {
                 session_points = hours;
             }

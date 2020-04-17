@@ -1,5 +1,6 @@
 using HousePointsApp.Interfaces;
 using HousePointsApp.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -7,6 +8,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,14 +17,21 @@ namespace HousePointsApp.DataServices
 {
     public class StudentDataService : IStudentDataService
     {
-        //private String CONNECTION_STRING = @"Data Source=(localdb)\MSSQLLocalDB; 
-        //                                     Initial Catalog = The_Learning_Factory_Points_System;";
-        private String CONNECTION_STRING = @"Data Source=localhost;Initial Catalog=The_Learning_Factory_Points_System;" +
-            "User ID=sa;Password=YourPasswordHere";
+        private String CONNECTION_STRING = @GetConnectionString();
+
+        private static String GetConnectionString()
+        {
+            String json = File.ReadAllText("appsettings.json");
+
+            // Query LionPath view for student's first name
+            object v = JsonConvert.DeserializeObject(json);
+            dynamic array = v;
+            String CONNECTION_STRING = array["DB_CONNECTION_STRING"];
+            return CONNECTION_STRING;
+        }
 
         public String GetFirstName(String studentId)
         {
-            // Query LionPath view for student's first name
 
             SqlConnection cnn = new SqlConnection(CONNECTION_STRING);
             cnn.Open();
