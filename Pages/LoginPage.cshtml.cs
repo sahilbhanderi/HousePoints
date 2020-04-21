@@ -81,6 +81,7 @@ namespace HousePointsApp
             if (student == null) // new student swipes id card
             {
                 String house_assignment = HouseAssignment();
+                Console.WriteLine(house_assignment);
 
                 if (sds.CreateStudent(studentId, house_assignment) && ads.CreateAttendance(studentId))
                 {

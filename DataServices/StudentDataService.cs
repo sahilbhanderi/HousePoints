@@ -99,7 +99,7 @@ namespace HousePointsApp.DataServices
             return campus_id;
         }
 
-        // This function retrieves the record for a specific student
+        // This function retrieves the record for a specific student based on 9-digit id
 
         public Student GetStudent(String studentId)
         {
@@ -108,6 +108,47 @@ namespace HousePointsApp.DataServices
             SqlConnection cnn = new SqlConnection(CONNECTION_STRING);
             cnn.Open();
             String getStudentSql = "SELECT * FROM student WHERE student_id = '" + studentId + "';";
+
+            Student student = new Student();
+
+            SqlCommand getStudentCommand = new SqlCommand(getStudentSql, cnn);
+
+
+            try
+            {
+                SqlDataReader getStudentReader = getStudentCommand.ExecuteReader();
+                if (getStudentReader.HasRows == false)
+                {
+                    return null;
+                }
+                while (getStudentReader.Read())
+                {
+                    student.student_id = getStudentReader.GetValue(0).ToString();
+                    student.campus_id = getStudentReader.GetValue(1).ToString();
+                    student.first_name = getStudentReader.GetValue(2).ToString();
+                    student.last_name = getStudentReader.GetValue(3).ToString();
+                    student.total_points = Convert.ToInt32(getStudentReader.GetValue(4));
+                }
+                cnn.Close();
+
+                return student;
+            }
+            catch (SqlException e)
+            {
+                Console.WriteLine(e.ToString());
+
+                cnn.Close();
+                return null;
+            }
+        }
+
+        public Student GetStudentCampusId(String campusId)
+        {
+            // Create and execute SQL query to retrieve a student record
+
+            SqlConnection cnn = new SqlConnection(CONNECTION_STRING);
+            cnn.Open();
+            String getStudentSql = "SELECT * FROM student WHERE campus_id = '" + campusId + "';";
 
             Student student = new Student();
 

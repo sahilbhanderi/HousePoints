@@ -6,15 +6,21 @@ namespace HousePointsApp.Interfaces
 {
     interface IAdminDataService
     {
-        public int CheckPoints(String studentId);
+        public String GetStudentId(String campusId);
 
-        public Boolean IncrementPoints(String studentId, int point);
+        public String GetFirstName(String campusId);
 
-        public Boolean DecrementPoints(String studentId, int point);
+        public String GetLastName(String campusId);
 
-        public Boolean SetPoints(String studentId, int points);
+        public int CheckPoints(String campusId);
 
-        public Boolean AddAccount(String studentID, String firstName, String lastName);
+        public Boolean IncrementPoints(String campusId, int point);
+
+        public Boolean DecrementPoints(String campusId, int point);
+
+        public Boolean SetPoints(String campusId, int points);
+
+        public Boolean AddAccount(String campusID);
 
         public Boolean AddPrize(String prize, int pointValue);
 
@@ -22,6 +28,7 @@ namespace HousePointsApp.Interfaces
 
         public Boolean UpdatePrizePoints(String prize, int prizePoints);
 
+        public List<int> GetPrizesId();
         public List<String> GetAllPrizesName();
         public List<String> GetAllPrizesValue();
 
