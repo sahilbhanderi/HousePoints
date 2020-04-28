@@ -27,6 +27,8 @@ namespace HousePointsApp
         public int ChangeValue { get; set; } = 0;
 
         public string PointMessage { get; set; } = "";
+
+        public List<int> PrizeIdList { get; set; } = null;
         
         public List<String> PrizeNameList { get; set; } = null;
         
@@ -73,17 +75,17 @@ namespace HousePointsApp
             // Basic error checking, Need to reset TempData as well
             if (UID == "" || UID == null)
             {
-                DisplayMessage = $"Error Occured due to ID/Prize Field Empty.";
+                DisplayMessage = $"Error Occurred due to ID/Prize Field Empty.";
                 return Page();
             }
             if (Action == "" || Action == null)
             {
-                DisplayMessage = $"Error Occured due to Action not specified.";
+                DisplayMessage = $"Error Occurred due to Action not specified.";
                 return Page();
             }
-            if ( (ChangeValue <= 0) && !(Action == "CheckBalance" || Action == "DeletePrize" || Action == "DeleteAccount"))
+            if ( (ChangeValue <= 0) && !(Action == "AddAccount" || Action == "CheckBalance" || Action == "DeletePrize" || Action == "DeleteAccount"))
             {
-                DisplayMessage = $"Error Occured due Value <= 0. Please enter a valid number.";
+                DisplayMessage = $"Error Occurred due Value <= 0. Please enter a valid number.";
                 PointMessage = $"Could not Complete Action, enter a positive number.";
                 return Page();
             }
@@ -91,10 +93,14 @@ namespace HousePointsApp
             {
                 Student student = new Student();
                 StudentDataService IfaceStudent = new StudentDataService();
-                if ((student = IfaceStudent.GetStudent(UID)) != null)
+                if ((student = IfaceStudent.GetStudentCampusId(UID)) != null)
                 {
                     switch (Action)
                     {
+                        case "AddAccount":
+                            success = IfaceAdmin.AddAccount(UID);
+                            PointMessage = "Student account added successfully.";
+                            break;
                         case "CheckBalance":
                             PointMessage = student.total_points.ToString();
                             break;
@@ -112,7 +118,7 @@ namespace HousePointsApp
                             success = IfaceStudent.DeleteStudent(student.campus_id);
                             break;
                         default:
-                            DisplayMessage = $"Error Occured due to Action variable undefined.";
+                            DisplayMessage = $"Error Occurred due to Action variable undefined.";
                             PointMessage = $"Could not Complete Action";
                             defaultCase = true;
                             success = false;
@@ -140,8 +146,16 @@ namespace HousePointsApp
                 }
                 else
                 {
-                    DisplayMessage = $"Error Occured due to Student not found.";
-                    
+                    switch (Action)
+                    {
+                        case "AddAccount":
+                            success = IfaceAdmin.AddAccount(UID);
+                            PointMessage = "Student account added successfully.";
+                            break;
+                        default:
+                            DisplayMessage = $"Error Occurred due to Student not found.";
+                            break;
+                    }
                 }
             }
             else if (Actiontype == "Prize")
@@ -158,11 +172,12 @@ namespace HousePointsApp
                         success = IfaceAdmin.DeletePrize(UID);
                         break;
                     default:
-                        DisplayMessage = $"Error Occured due to Action variable undefined.";
+                        DisplayMessage = $"Error Occurred due to Action variable undefined.";
                         defaultCase = true;
                         success = false;
                         break;
                 }
+                PrizeIdList = IfaceAdmin.GetPrizesId();
                 PrizeNameList = IfaceAdmin.GetAllPrizesName();
                 PrizeValueList = IfaceAdmin.GetAllPrizesValue();
                 if (success)
@@ -185,6 +200,18 @@ namespace HousePointsApp
                 
             }
             
+            return Page();
+        }
+        public IActionResult OnPostAddAccount()
+        {
+            TempData.Remove("Action");
+            TempData.Remove("Actiontype");
+
+            TempData["Action"] = "AddAccount";
+            TempData["Actiontype"] = "User";
+
+            ChangeValue = 0;
+
             return Page();
         }
         public IActionResult OnPostCheckBalance()
@@ -241,11 +268,13 @@ namespace HousePointsApp
             TempData.Remove("Action");
             TempData.Remove("Actiontype");
             AdminDataService IfaceAdmin = new AdminDataService();
+            PrizeIdList = IfaceAdmin.GetPrizesId();
             PrizeNameList = IfaceAdmin.GetAllPrizesName();
             PrizeValueList = IfaceAdmin.GetAllPrizesValue();
-            if (PrizeNameList == null || PrizeValueList == null)
+            if (PrizeIdList == null || PrizeNameList == null || PrizeValueList == null)
             {
-                DisplayMessage = "Error Retrieving Prize List from Database!";
+                DisplayMessage = "Error Retrieving Prize List from Database. Connection" +
+                    " to database failed or no prizes exist yet.";
             }
             
             TempData["Action"] = "SetPrize";
@@ -257,11 +286,13 @@ namespace HousePointsApp
             TempData.Remove("Action");
             TempData.Remove("Actiontype");
             AdminDataService IfaceAdmin = new AdminDataService();
+            PrizeIdList = IfaceAdmin.GetPrizesId();
             PrizeNameList = IfaceAdmin.GetAllPrizesName();
             PrizeValueList = IfaceAdmin.GetAllPrizesValue();
-            if (PrizeNameList == null || PrizeValueList == null)
+            if (PrizeIdList == null || PrizeNameList == null || PrizeValueList == null)
             {
-                DisplayMessage = "Error Retrieving Prize List from Database!";
+                DisplayMessage = "Error Retrieving Prize List from Database. Connection" +
+                    " to database failed or no prizes exist yet.";
             }
             TempData["Action"] = "AddPrize";
             TempData["Actiontype"] = "Prize";
@@ -272,11 +303,13 @@ namespace HousePointsApp
             TempData.Remove("Action");
             TempData.Remove("Actiontype");
             AdminDataService IfaceAdmin = new AdminDataService();
+            PrizeIdList = IfaceAdmin.GetPrizesId();
             PrizeNameList = IfaceAdmin.GetAllPrizesName();
             PrizeValueList = IfaceAdmin.GetAllPrizesValue();
-            if (PrizeNameList == null || PrizeValueList == null)
+            if (PrizeIdList == null || PrizeNameList == null || PrizeValueList == null)
             {
-                DisplayMessage = "Error Retrieving Prize List from Database!";
+                DisplayMessage = "Error Retrieving Prize List from Database. Connection" +
+                    " to database failed or no prizes exist yet.";
             }
             TempData["Action"] = "DeletePrize";
             TempData["Actiontype"] = "Prize";

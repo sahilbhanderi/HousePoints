@@ -33,40 +33,44 @@
                     TempData.Keep("Action");
                     switch (CurrentAction)
                     {
-                    case "CheckBalance":
-                        StudentActionMessage = "Check Point Balances";
-                        ValueFieldLabel = "No Input Needed";
-                        break;
-                    case "SetPoint":
-                        StudentActionMessage = "Set Point Balances";
-                        ValueFieldLabel = "Set Point to";
-                        break;
-                    case "IncreasePoint":
-                        StudentActionMessage = "Increase/Award Points";
-                        ValueFieldLabel = "Increase Point By";
-                        break;
-                    case "DecreasePoint":
-                        StudentActionMessage = "Decrease/Redeem Points";
-                        ValueFieldLabel = "Decrease Point by";
-                        break;
-                    case "DeleteAccount":
-                        StudentActionMessage = "Delete Account";
-                        ValueFieldLabel = "No Input Needed";
-                        break;
-                    case "SetPrize":
-                        PrizeActionMessage = "Set Value of Existing Prize";
-                        ValueFieldLabel = "Set Prize Value to";
-                        break;
-                    case "AddPrize":
-                        PrizeActionMessage = "Add New Prize";
-                        ValueFieldLabel = "Set Prize Value to";
-                        break;
-                    case "DeletePrize":
-                        PrizeActionMessage = "Delete Existing Prize";
-                        ValueFieldLabel = "No Input Needed";
-                        break;
-                    default:
-                        break;
+                        case "AddAccount":
+                            StudentActionMessage = "Add Student Account";
+                            ValueFieldLabel = "No Input Needed";
+                            break;
+                        case "CheckBalance":
+                            StudentActionMessage = "Check Point Balances";
+                            ValueFieldLabel = "No Input Needed";
+                            break;
+                        case "SetPoint":
+                            StudentActionMessage = "Set Point Balances";
+                            ValueFieldLabel = "Set Point to";
+                            break;
+                        case "IncreasePoint":
+                            StudentActionMessage = "Increase/Award Points";
+                            ValueFieldLabel = "Increase Point By";
+                            break;
+                        case "DecreasePoint":
+                            StudentActionMessage = "Decrease/Redeem Points";
+                            ValueFieldLabel = "Decrease Point by";
+                            break;
+                        case "DeleteAccount":
+                            StudentActionMessage = "Delete Account";
+                            ValueFieldLabel = "No Input Needed";
+                            break;
+                        case "SetPrize":
+                            PrizeActionMessage = "Set Value of Existing Prize";
+                            ValueFieldLabel = "Set Prize Value to";
+                            break;
+                        case "AddPrize":
+                            PrizeActionMessage = "Add New Prize";
+                            ValueFieldLabel = "Set Prize Value to";
+                            break;
+                        case "DeletePrize":
+                            PrizeActionMessage = "Delete Existing Prize";
+                            ValueFieldLabel = "No Input Needed";
+                            break;
+                        default:
+                            break;
                     }
                 }
             }
@@ -90,6 +94,9 @@
                                     <span class="caret"></span>
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="dropdownActionMenu" role="menu">
+                                    <li>
+                                        <button class="btn btn-secondary" style="width:200px;" value="Add Student Account" asp-page-handler="AddAccount">Add Student Account</button>
+                                    </li>
                                     <li>
                                         <button class="btn btn-secondary" style="width:200px;" value="Check Point Balances" asp-page-handler="CheckBalance">Check Point Balances</button>
                                     </li>
@@ -131,7 +138,7 @@
                        
 
                         <div class="row" style="margin:20px">
-                            <label asp-for="UID">Student/Prize ID:</label>
+                            <label asp-for="UID">Student Campus ID or Prize Name:</label>
                             <input asp-for="UID" type="text" placeholder="Enter Here" />
                         </div>
                         <div class="row" style="margin:20px">
@@ -153,7 +160,7 @@
                 </div>
             </form>
         }
-        @if (Model.PrizeNameList != null && Model.PrizeValueList != null)
+        @if (Model.PrizeIdList != null && Model.PrizeNameList != null && Model.PrizeValueList != null)
         {
             <div class="container mb-5 mt-3">
                 <h3  style="color:#42b9f4;">
@@ -163,6 +170,7 @@
                 <table class="table table-striped table-bordered" style="width: 100%">
                     <thead>
                         <tr>
+                            <th>Prize ID</th>
                             <th>Prize Name</th>
                             <th>Points Value</th>
                         </tr>
@@ -171,6 +179,7 @@
                         @for (var i = 0; i < Model.PrizeNameList.Count(); i++)
                         {
                             <tr>
+                                <th>@Model.PrizeIdList[i]</th>
                                 <th>@Model.PrizeNameList[i]</th>
                                 <th>@Model.PrizeValueList[i]</th>
                             </tr>

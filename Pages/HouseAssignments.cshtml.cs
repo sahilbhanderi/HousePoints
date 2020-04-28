@@ -26,7 +26,7 @@ namespace HousePointsApp
             }
             else
             {
-                DisplayMessage = "Student House Assignments";
+                DisplayMessage = "House Assignments for Each Registered Student";
             }
         }
     }
